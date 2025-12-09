@@ -32,7 +32,9 @@
 
 #include "core/templates/paged_allocator.h"
 #include "servers/rendering/renderer_rd/cluster_builder_rd.h"
+#ifndef FSR2_DISABLED
 #include "servers/rendering/renderer_rd/effects/fsr2.h"
+#endif
 #ifdef METAL_ENABLED
 #include "servers/rendering/renderer_rd/effects/metal_fx.h"
 #endif
@@ -94,7 +96,9 @@ public:
 
 	private:
 		RenderSceneBuffersRD *render_buffers = nullptr;
+#ifndef FSR2_DISABLED
 		RendererRD::FSR2Context *fsr2_context = nullptr;
+#endif
 #ifdef METAL_MFXTEMPORAL_ENABLED
 		RendererRD::MFXTemporalContext *mfx_temporal_context = nullptr;
 #endif
@@ -138,8 +142,10 @@ public:
 		RID get_voxelgi(uint32_t p_layer) { return render_buffers->get_texture_slice(RB_SCOPE_FORWARD_CLUSTERED, RB_TEX_VOXEL_GI, p_layer, 0); }
 		RID get_voxelgi_msaa(uint32_t p_layer) { return render_buffers->get_texture_slice(RB_SCOPE_FORWARD_CLUSTERED, RB_TEX_VOXEL_GI_MSAA, p_layer, 0); }
 
+#ifndef FSR2_DISABLED
 		void ensure_fsr2(RendererRD::FSR2Effect *p_effect);
 		RendererRD::FSR2Context *get_fsr2_context() const { return fsr2_context; }
+#endif
 
 #ifdef METAL_MFXTEMPORAL_ENABLED
 		bool ensure_mfx_temporal(RendererRD::MFXTemporalEffect *p_effect);
@@ -718,7 +724,9 @@ private:
 
 	RendererRD::Resolve *resolve_effects = nullptr;
 	RendererRD::TAA *taa = nullptr;
+#ifndef FSR2_DISABLED
 	RendererRD::FSR2Effect *fsr2_effect = nullptr;
+#endif
 	RendererRD::SSEffects *ss_effects = nullptr;
 
 #ifdef METAL_MFXTEMPORAL_ENABLED

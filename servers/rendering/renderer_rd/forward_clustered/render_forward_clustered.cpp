@@ -82,11 +82,13 @@ void RenderForwardClustered::RenderBufferDataForwardClustered::ensure_voxelgi() 
 	}
 }
 
+#ifndef FSR2_DISABLED
 void RenderForwardClustered::RenderBufferDataForwardClustered::ensure_fsr2(RendererRD::FSR2Effect *p_effect) {
 	if (fsr2_context == nullptr) {
 		fsr2_context = p_effect->create_context(render_buffers->get_internal_size(), render_buffers->get_target_size());
 	}
 }
+#endif
 
 #ifdef METAL_MFXTEMPORAL_ENABLED
 bool RenderForwardClustered::RenderBufferDataForwardClustered::ensure_mfx_temporal(RendererRD::MFXTemporalEffect *p_effect) {
@@ -122,10 +124,12 @@ void RenderForwardClustered::RenderBufferDataForwardClustered::free_data() {
 		cluster_builder = nullptr;
 	}
 
+#ifndef FSR2_DISABLED
 	if (fsr2_context) {
 		memdelete(fsr2_context);
 		fsr2_context = nullptr;
 	}
+#endif
 
 #ifdef METAL_MFXTEMPORAL_ENABLED
 	if (mfx_temporal_context) {
@@ -1725,14 +1729,18 @@ void RenderForwardClustered::_render_scene(RenderDataRD *p_render_data, const Co
 
 	enum {
 		SCALE_NONE,
+#ifndef FSR2_DISABLED
 		SCALE_FSR2,
+#endif
 		SCALE_MFX,
 	} scale_type = SCALE_NONE;
 
 	switch (rb->get_scaling_3d_mode()) {
+#ifndef FSR2_DISABLED
 		case RS::VIEWPORT_SCALING_3D_MODE_FSR2:
 			scale_type = SCALE_FSR2;
 			break;
+#endif
 		case RS::VIEWPORT_SCALING_3D_MODE_METALFX_TEMPORAL:
 #ifdef METAL_MFXTEMPORAL_ENABLED
 			scale_type = SCALE_MFX;
@@ -2409,6 +2417,8 @@ void RenderForwardClustered::_render_scene(RenderDataRD *p_render_data, const Co
 	RD::get_singleton()->draw_command_end_label();
 
 	if (rb_data.is_valid() && (using_upscaling || using_taa)) {
+		bool handled = false;
+#ifndef FSR2_DISABLED
 		if (scale_type == SCALE_FSR2) {
 			rb_data->ensure_fsr2(fsr2_effect);
 
@@ -2455,8 +2465,11 @@ void RenderForwardClustered::_render_scene(RenderDataRD *p_render_data, const Co
 			}
 
 			RD::get_singleton()->draw_command_end_label();
-		} else if (scale_type == SCALE_MFX) {
+			handled = true;
+		}
+#endif
 #ifdef METAL_MFXTEMPORAL_ENABLED
+		if (!handled && scale_type == SCALE_MFX) {
 			bool reset = rb_data->ensure_mfx_temporal(mfx_temporal_effect);
 
 			RID exposure;
@@ -2483,8 +2496,10 @@ void RenderForwardClustered::_render_scene(RenderDataRD *p_render_data, const Co
 			}
 
 			RD::get_singleton()->draw_command_end_label();
+			handled = true;
+		}
 #endif
-		} else if (using_taa) {
+		if (!handled && using_taa) {
 			RD::get_singleton()->draw_command_begin_label("TAA");
 			RENDER_TIMESTAMP("TAA");
 			taa->process(rb, _render_buffers_get_color_format(), p_render_data->scene_data->z_near, p_render_data->scene_data->z_far);
@@ -5046,7 +5061,9 @@ RenderForwardClustered::RenderForwardClustered() {
 
 	resolve_effects = memnew(RendererRD::Resolve());
 	taa = memnew(RendererRD::TAA);
+#ifndef FSR2_DISABLED
 	fsr2_effect = memnew(RendererRD::FSR2Effect);
+#endif
 	ss_effects = memnew(RendererRD::SSEffects);
 #ifdef METAL_MFXTEMPORAL_ENABLED
 	motion_vectors_store = memnew(RendererRD::MotionVectorsStore);
@@ -5065,10 +5082,12 @@ RenderForwardClustered::~RenderForwardClustered() {
 		taa = nullptr;
 	}
 
+#ifndef FSR2_DISABLED
 	if (fsr2_effect) {
 		memdelete(fsr2_effect);
 		fsr2_effect = nullptr;
 	}
+#endif
 
 #ifdef METAL_MFXTEMPORAL_ENABLED
 	if (mfx_temporal_effect) {
