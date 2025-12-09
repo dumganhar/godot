@@ -35,6 +35,7 @@
 
 #include "audio/audio_effect.h"
 #include "audio/audio_stream.h"
+#ifndef AUDIO_EFFECTS_DISABLED
 #include "audio/effects/audio_effect_amplify.h"
 #include "audio/effects/audio_effect_capture.h"
 #include "audio/effects/audio_effect_chorus.h"
@@ -54,6 +55,7 @@
 #include "audio/effects/audio_effect_spectrum_analyzer.h"
 #include "audio/effects/audio_effect_stereo_enhance.h"
 #include "audio/effects/audio_stream_generator.h"
+#endif // AUDIO_EFFECTS_DISABLED
 #include "audio_server.h"
 #include "camera/camera_feed.h"
 #include "camera_server.h"
@@ -82,9 +84,11 @@
 #include "text/text_server_dummy.h"
 #include "text/text_server_extension.h"
 #include "text_server.h"
+#ifndef AUDIO_EFFECTS_DISABLED
 #ifndef DISABLE_DEPRECATED
 #include "audio/effects/audio_effect_limiter.h"
 #endif
+#endif // AUDIO_EFFECTS_DISABLED
 
 // 2D physics and navigation.
 #ifndef NAVIGATION_2D_DISABLED
@@ -180,9 +184,11 @@ void register_server_types() {
 	GDREGISTER_CLASS(AudioSamplePlayback);
 	GDREGISTER_VIRTUAL_CLASS(AudioEffect);
 	GDREGISTER_VIRTUAL_CLASS(AudioEffectInstance);
+	GDREGISTER_CLASS(AudioBusLayout);
+
+#ifndef AUDIO_EFFECTS_DISABLED
 	GDREGISTER_CLASS(AudioEffectEQ);
 	GDREGISTER_CLASS(AudioEffectFilter);
-	GDREGISTER_CLASS(AudioBusLayout);
 
 	GDREGISTER_CLASS(AudioStreamGenerator);
 	GDREGISTER_ABSTRACT_CLASS(AudioStreamGeneratorPlayback);
@@ -228,6 +234,7 @@ void register_server_types() {
 		GDREGISTER_CLASS(AudioEffectLimiter);
 #endif
 	}
+#endif // AUDIO_EFFECTS_DISABLED
 
 	GDREGISTER_ABSTRACT_CLASS(RenderingDevice);
 	GDREGISTER_CLASS(ShaderIncludeDB);

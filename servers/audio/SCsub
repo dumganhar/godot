@@ -5,4 +5,5 @@ Import("env")
 
 env.add_source_files(env.servers_sources, "*.cpp")
 
-SConscript("effects/SCsub")
+if not env["disable_audio_effects"]:
+    SConscript("effects/SCsub")

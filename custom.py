@@ -7,6 +7,7 @@ optimize = "size"
 # Core feature disables
 disable_audio_3d = "yes"      # Disables only 3D audio (AudioStreamPlayer3D, AudioListener3D)
 disable_audio_stream_wav = "yes"  # Disables AudioStreamWAV
+disable_audio_effects = "yes"     # Disables all audio effects (AudioEffect*)
 disable_debugger = "yes"
 disable_servers_debugger = "yes"  # Disables ServersDebugger
 disable_controller_mappings = "yes"  # Disables controller/gamepad mappings

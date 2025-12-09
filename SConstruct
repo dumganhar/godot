@@ -244,6 +244,7 @@ opts.Add(BoolVariable("disable_debugger", "Disable debugger", False))
 opts.Add(BoolVariable("disable_servers_debugger", "Disable servers debugger (ServersDebugger)", False))
 opts.Add(BoolVariable("disable_audio_3d", "Disable 3D audio (AudioStreamPlayer3D, AudioListener3D)", False))
 opts.Add(BoolVariable("disable_audio_stream_wav", "Disable AudioStreamWAV", False))
+opts.Add(BoolVariable("disable_audio_effects", "Disable audio effects (AudioEffect*)", False))
 opts.Add(BoolVariable("disable_controller_mappings", "Disable controller/gamepad mappings", False))
 opts.Add("build_profile", "Path to a file containing a feature build profile", "")
 opts.Add("custom_modules", "A list of comma-separated directory paths containing custom modules to build.", "")
@@ -1034,6 +1035,8 @@ if env["disable_audio_3d"]:
     env.Append(CPPDEFINES=["AUDIO_3D_DISABLED"])
 if env["disable_audio_stream_wav"]:
     env.Append(CPPDEFINES=["AUDIO_STREAM_WAV_DISABLED"])
+if env["disable_audio_effects"]:
+    env.Append(CPPDEFINES=["AUDIO_EFFECTS_DISABLED"])
 if env["disable_controller_mappings"]:
     env.Append(CPPDEFINES=["CONTROLLER_MAPPINGS_DISABLED"])
 if env["builtin_zstd"]:
