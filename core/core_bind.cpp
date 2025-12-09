@@ -33,9 +33,12 @@
 
 #include "core/config/project_settings.h"
 #include "core/crypto/crypto_core.h"
+#ifndef DEBUGGER_DISABLED
 #include "core/debugger/engine_debugger.h"
 #include "core/debugger/script_debugger.h"
+#endif
 #include "core/io/marshalls.h"
+#include "core/object/script_language.h"
 #include "core/math/geometry_2d.h"
 #include "core/math/geometry_3d.h"
 #include "core/os/keyboard.h"
@@ -2138,6 +2141,7 @@ void Engine::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "physics_jitter_fix"), "set_physics_jitter_fix", "get_physics_jitter_fix");
 }
 
+#ifndef DEBUGGER_DISABLED
 ////// EngineDebugger //////
 
 bool EngineDebugger::is_active() {
@@ -2317,5 +2321,6 @@ void EngineDebugger::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("remove_breakpoint", "line", "source"), &EngineDebugger::remove_breakpoint);
 	ClassDB::bind_method(D_METHOD("clear_breakpoints"), &EngineDebugger::clear_breakpoints);
 }
+#endif // DEBUGGER_DISABLED
 
 } // namespace CoreBind

@@ -30,6 +30,8 @@
 
 #include "remote_debugger_peer.h"
 
+#ifndef DEBUGGER_DISABLED
+
 #include "core/config/project_settings.h"
 #include "core/io/marshalls.h"
 #include "core/os/os.h"
@@ -246,3 +248,5 @@ RemoteDebuggerPeer *RemoteDebuggerPeerTCP::create(const String &p_uri) {
 RemoteDebuggerPeer::RemoteDebuggerPeer() {
 	max_queued_messages = (int)GLOBAL_GET("network/limits/debugger/max_queued_messages");
 }
+
+#endif // DEBUGGER_DISABLED

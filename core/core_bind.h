@@ -642,6 +642,7 @@ public:
 	Engine() { singleton = this; }
 };
 
+#ifndef DEBUGGER_DISABLED
 class EngineDebugger : public Object {
 	GDCLASS(EngineDebugger, Object);
 
@@ -691,6 +692,7 @@ public:
 	EngineDebugger() { singleton = this; }
 	~EngineDebugger();
 };
+#endif // DEBUGGER_DISABLED
 
 } // namespace CoreBind
 

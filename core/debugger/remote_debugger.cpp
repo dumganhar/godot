@@ -30,6 +30,8 @@
 
 #include "remote_debugger.h"
 
+#ifndef DEBUGGER_DISABLED
+
 #include "core/config/project_settings.h"
 #include "core/debugger/debugger_marshalls.h"
 #include "core/debugger/engine_debugger.h"
@@ -770,3 +772,5 @@ RemoteDebugger::~RemoteDebugger() {
 	remove_print_handler(&phl);
 	remove_error_handler(&eh);
 }
+
+#endif // DEBUGGER_DISABLED

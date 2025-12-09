@@ -30,6 +30,18 @@
 
 #include "engine_profiler.h"
 
+#ifdef DEBUGGER_DISABLED
+
+void EngineProfiler::_bind_methods() {}
+void EngineProfiler::toggle(bool p_enable, const Array &p_array) {}
+void EngineProfiler::add(const Array &p_data) {}
+void EngineProfiler::tick(double p_frame_time, double p_process_time, double p_physics_time, double p_physics_frame_time) {}
+Error EngineProfiler::bind(const String &p_name) { return ERR_UNAVAILABLE; }
+Error EngineProfiler::unbind() { return ERR_UNAVAILABLE; }
+EngineProfiler::~EngineProfiler() {}
+
+#else // DEBUGGER_DISABLED
+
 #include "core/debugger/engine_debugger.h"
 
 void EngineProfiler::_bind_methods() {
@@ -80,3 +92,5 @@ EngineProfiler::~EngineProfiler() {
 		unbind();
 	}
 }
+
+#endif // DEBUGGER_DISABLED

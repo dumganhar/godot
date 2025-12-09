@@ -33,7 +33,9 @@
 #include "core/config/project_settings.h"
 #include "core/core_globals.h"
 #include "core/crypto/crypto.h"
+#ifndef DEBUGGER_DISABLED
 #include "core/debugger/engine_debugger.h"
+#endif
 #include "core/extension/extension_api_dump.h"
 #include "core/extension/gdextension_interface_dump.gen.h"
 #include "core/extension/gdextension_manager.h"
@@ -870,7 +872,9 @@ void Main::test_cleanup() {
 	uninitialize_modules(MODULE_INITIALIZATION_LEVEL_SERVERS);
 	unregister_server_types();
 
+#ifndef DEBUGGER_DISABLED
 	EngineDebugger::deinitialize();
+#endif
 	OS::get_singleton()->finalize();
 
 	if (packed_data) {
@@ -2107,11 +2111,13 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 	GLOBAL_DEF(PropertyInfo(Variant::INT, "network/limits/debugger/max_errors_per_second", PROPERTY_HINT_RANGE, "1,200,1,or_greater"), 400);
 	GLOBAL_DEF(PropertyInfo(Variant::INT, "network/limits/debugger/max_warnings_per_second", PROPERTY_HINT_RANGE, "1,200,1,or_greater"), 400);
 
+#ifndef DEBUGGER_DISABLED
 	EngineDebugger::initialize(debug_uri, skip_breakpoints, ignore_error_breaks, breakpoints, []() {
 		if (editor_pid) {
 			DisplayServer::get_singleton()->enable_for_stealing_focus(editor_pid);
 		}
 	});
+#endif
 
 #ifdef TOOLS_ENABLED
 	if (editor) {
@@ -2867,7 +2873,9 @@ error:
 		OS::get_singleton()->remove_lock_file();
 	}
 
+#ifndef DEBUGGER_DISABLED
 	EngineDebugger::deinitialize();
+#endif
 
 	if (performance) {
 		memdelete(performance);
@@ -3735,11 +3743,13 @@ Error Main::setup2(bool p_show_boot_logo) {
 	BindingsGenerator::handle_cmdline_args(cmdline_args);
 #endif
 
+#ifndef DEBUGGER_DISABLED
 	if (use_debug_profiler && EngineDebugger::is_active()) {
 		// Start the "scripts" profiler, used in local debugging.
 		// We could add more, and make the CLI arg require a comma-separated list of profilers.
 		EngineDebugger::get_singleton()->profiler_enable("scripts", true);
 	}
+#endif
 
 	if (!project_manager) {
 		// If not running the project manager, and now that the engine is
@@ -4852,9 +4862,11 @@ bool Main::iteration() {
 
 	AudioServer::get_singleton()->update();
 
+#ifndef DEBUGGER_DISABLED
 	if (EngineDebugger::is_active()) {
 		EngineDebugger::get_singleton()->iteration(frame_time, process_ticks, physics_process_ticks, physics_step);
 	}
+#endif
 
 	frames++;
 	Engine::get_singleton()->_process_frames++;
@@ -5050,7 +5062,9 @@ void Main::cleanup(bool p_force) {
 	uninitialize_modules(MODULE_INITIALIZATION_LEVEL_SERVERS);
 	unregister_server_types();
 
+#ifndef DEBUGGER_DISABLED
 	EngineDebugger::deinitialize();
+#endif
 
 #ifndef XR_DISABLED
 	if (xr_server) {

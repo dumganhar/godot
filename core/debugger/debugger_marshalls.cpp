@@ -30,6 +30,8 @@
 
 #include "debugger_marshalls.h"
 
+#ifndef DEBUGGER_DISABLED
+
 #include "core/io/marshalls.h"
 
 #define CHECK_SIZE(arr, expected, what) ERR_FAIL_COND_V_MSG((uint32_t)arr.size() < (uint32_t)(expected), false, String("Malformed ") + what + " message from script debugger, message too short. Expected size: " + itos(expected) + ", actual size: " + itos(arr.size()))
@@ -177,3 +179,5 @@ Ref<Shortcut> DebuggerMarshalls::deserialize_key_shortcut(const Array &p_keys) {
 	shortcut->set_events(key_events);
 	return shortcut;
 }
+
+#endif // DEBUGGER_DISABLED

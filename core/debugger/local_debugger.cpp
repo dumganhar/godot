@@ -30,6 +30,8 @@
 
 #include "local_debugger.h"
 
+#ifndef DEBUGGER_DISABLED
+
 #include "core/debugger/script_debugger.h"
 #include "core/os/os.h"
 
@@ -388,3 +390,5 @@ LocalDebugger::~LocalDebugger() {
 		memdelete(scripts_profiler);
 	}
 }
+
+#endif // DEBUGGER_DISABLED

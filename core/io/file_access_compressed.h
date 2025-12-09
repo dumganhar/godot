@@ -35,7 +35,11 @@
 
 class FileAccessCompressed : public FileAccess {
 	GDSOFTCLASS(FileAccessCompressed, FileAccess);
+#ifdef ZSTD_ENABLED
 	Compression::Mode cmode = Compression::MODE_ZSTD;
+#else
+	Compression::Mode cmode = Compression::MODE_DEFLATE;
+#endif
 	bool writing = false;
 	uint64_t write_pos = 0;
 	uint8_t *write_ptr = nullptr;
@@ -66,7 +70,11 @@ class FileAccessCompressed : public FileAccess {
 	void _close();
 
 public:
+#ifdef ZSTD_ENABLED
 	void configure(const String &p_magic, Compression::Mode p_mode = Compression::MODE_ZSTD, uint32_t p_block_size = 4096);
+#else
+	void configure(const String &p_magic, Compression::Mode p_mode = Compression::MODE_DEFLATE, uint32_t p_block_size = 4096);
+#endif
 
 	Error open_after_magic(Ref<FileAccess> p_base);
 

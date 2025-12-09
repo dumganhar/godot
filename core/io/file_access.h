@@ -79,7 +79,9 @@ public:
 	enum CompressionMode : int32_t {
 		COMPRESSION_FASTLZ = Compression::MODE_FASTLZ,
 		COMPRESSION_DEFLATE = Compression::MODE_DEFLATE,
+#ifdef ZSTD_ENABLED
 		COMPRESSION_ZSTD = Compression::MODE_ZSTD,
+#endif
 		COMPRESSION_GZIP = Compression::MODE_GZIP,
 		COMPRESSION_BROTLI = Compression::MODE_BROTLI,
 	};

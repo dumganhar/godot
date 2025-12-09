@@ -30,6 +30,37 @@
 
 #include "engine_debugger.h"
 
+#ifdef DEBUGGER_DISABLED
+
+void (*EngineDebugger::allow_focus_steal_fn)();
+
+void EngineDebugger::initialize(const String &p_uri, bool p_skip_breakpoints, bool p_ignore_error_breaks, const Vector<String> &p_breakpoints, void (*p_allow_focus_steal_fn)()) {
+	// Debugger disabled, do nothing.
+}
+
+void EngineDebugger::deinitialize() {
+	// Debugger disabled, do nothing.
+}
+
+void EngineDebugger::register_profiler(const StringName &p_name, const Profiler &p_func) {}
+void EngineDebugger::unregister_profiler(const StringName &p_name) {}
+void EngineDebugger::register_message_capture(const StringName &p_name, Capture p_func) {}
+void EngineDebugger::unregister_message_capture(const StringName &p_name) {}
+void EngineDebugger::register_uri_handler(const String &p_protocol, CreatePeerFunc p_func) {}
+void EngineDebugger::profiler_enable(const StringName &p_name, bool p_enabled, const Array &p_opts) {}
+void EngineDebugger::profiler_add_frame_data(const StringName &p_name, const Array &p_data) {}
+bool EngineDebugger::is_profiling(const StringName &p_name) { return false; }
+bool EngineDebugger::has_profiler(const StringName &p_name) { return false; }
+bool EngineDebugger::has_capture(const StringName &p_name) { return false; }
+Error EngineDebugger::capture_parse(const StringName &p_name, const String &p_msg, const Array &p_args, bool &r_captured) {
+	r_captured = false;
+	return ERR_UNAVAILABLE;
+}
+void EngineDebugger::iteration(uint64_t p_frame_ticks, uint64_t p_process_ticks, uint64_t p_physics_ticks, double p_physics_frame_time) {}
+EngineDebugger::~EngineDebugger() {}
+
+#else // DEBUGGER_DISABLED
+
 #include "core/debugger/local_debugger.h"
 #include "core/debugger/remote_debugger.h"
 #include "core/debugger/remote_debugger_peer.h"
@@ -194,3 +225,5 @@ EngineDebugger::~EngineDebugger() {
 	script_debugger = nullptr;
 	singleton = nullptr;
 }
+
+#endif // DEBUGGER_DISABLED

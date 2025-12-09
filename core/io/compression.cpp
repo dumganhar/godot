@@ -35,17 +35,21 @@
 
 #include "thirdparty/misc/fastlz.h"
 
+#ifdef ZSTD_ENABLED
 #include <zstd.h>
+#endif
 
 #ifdef BROTLI_ENABLED
 #include <brotli/decode.h>
 #endif
 
+#ifdef ZSTD_ENABLED
 // Caches for zstd.
 static BinaryMutex mutex;
 static ZSTD_DCtx *current_zstd_d_ctx = nullptr;
 static bool current_zstd_long_distance_matching;
 static int current_zstd_window_log_size;
+#endif
 
 int64_t Compression::compress(uint8_t *p_dst, const uint8_t *p_src, int64_t p_src_size, Mode p_mode) {
 	switch (p_mode) {
@@ -90,6 +94,7 @@ int64_t Compression::compress(uint8_t *p_dst, const uint8_t *p_src, int64_t p_sr
 			return aout;
 
 		} break;
+#ifdef ZSTD_ENABLED
 		case MODE_ZSTD: {
 			ZSTD_CCtx *cctx = ZSTD_createCCtx();
 			ZSTD_CCtx_setParameter(cctx, ZSTD_c_compressionLevel, zstd_level);
@@ -102,6 +107,7 @@ int64_t Compression::compress(uint8_t *p_dst, const uint8_t *p_src, int64_t p_sr
 			ZSTD_freeCCtx(cctx);
 			return (int64_t)ret;
 		} break;
+#endif
 	}
 
 	ERR_FAIL_V(-1);
@@ -138,9 +144,11 @@ int64_t Compression::get_max_compressed_buffer_size(int64_t p_src_size, Mode p_m
 			deflateEnd(&strm);
 			return aout;
 		} break;
+#ifdef ZSTD_ENABLED
 		case MODE_ZSTD: {
 			return ZSTD_compressBound(p_src_size);
 		} break;
+#endif
 	}
 
 	ERR_FAIL_V(-1);
@@ -197,6 +205,7 @@ int64_t Compression::decompress(uint8_t *p_dst, int64_t p_dst_max_size, const ui
 			ERR_FAIL_COND_V(err != Z_STREAM_END, -1);
 			return total;
 		} break;
+#ifdef ZSTD_ENABLED
 		case MODE_ZSTD: {
 			MutexLock lock(mutex);
 
@@ -216,6 +225,7 @@ int64_t Compression::decompress(uint8_t *p_dst, int64_t p_dst_max_size, const ui
 			size_t ret = ZSTD_decompressDCtx(current_zstd_d_ctx, p_dst, p_dst_max_size, p_src, p_src_size);
 			return (int64_t)ret;
 		} break;
+#endif
 	}
 
 	ERR_FAIL_V(-1);

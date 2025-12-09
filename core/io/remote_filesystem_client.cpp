@@ -223,8 +223,13 @@ Error RemoteFilesystemClient::_synchronize_with_server(const String &p_host, int
 		}
 		String s = sbuild.as_string();
 		CharString cs = s.utf8();
+#ifdef ZSTD_ENABLED
 		file_cache_buffer.resize(Compression::get_max_compressed_buffer_size(cs.length(), Compression::MODE_ZSTD));
 		const int64_t res_len = Compression::compress(file_cache_buffer.ptrw(), (const uint8_t *)cs.ptr(), cs.length(), Compression::MODE_ZSTD);
+#else
+		file_cache_buffer.resize(Compression::get_max_compressed_buffer_size(cs.length(), Compression::MODE_DEFLATE));
+		const int64_t res_len = Compression::compress(file_cache_buffer.ptrw(), (const uint8_t *)cs.ptr(), cs.length(), Compression::MODE_DEFLATE);
+#endif
 		file_cache_buffer.resize(res_len);
 
 		tcp_client->put_32(cs.length()); // Size of buffer uncompressed

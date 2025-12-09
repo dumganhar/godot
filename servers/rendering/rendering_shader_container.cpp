@@ -421,6 +421,7 @@ bool RenderingShaderContainer::compress_code(const uint8_t *p_decompressed_bytes
 
 	*r_compressed_flags = 0;
 
+#ifdef ZSTD_ENABLED
 	PackedByteArray zstd_bytes;
 	const int64_t zstd_max_bytes = Compression::get_max_compressed_buffer_size(p_decompressed_size, Compression::MODE_ZSTD);
 	zstd_bytes.resize(zstd_max_bytes);
@@ -436,6 +437,11 @@ bool RenderingShaderContainer::compress_code(const uint8_t *p_decompressed_bytes
 		memcpy(p_compressed_bytes, p_decompressed_bytes, p_decompressed_size);
 		*r_compressed_size = p_decompressed_size;
 	}
+#else
+	// Just copy the input to the output directly.
+	memcpy(p_compressed_bytes, p_decompressed_bytes, p_decompressed_size);
+	*r_compressed_size = p_decompressed_size;
+#endif
 
 	return true;
 }
@@ -448,9 +454,13 @@ bool RenderingShaderContainer::decompress_code(const uint8_t *p_compressed_bytes
 
 	bool uses_zstd = p_compressed_flags & COMPRESSION_FLAG_ZSTD;
 	if (uses_zstd) {
+#ifdef ZSTD_ENABLED
 		if (!Compression::decompress(p_decompressed_bytes, p_decompressed_size, p_compressed_bytes, p_compressed_size, Compression::MODE_ZSTD)) {
 			ERR_FAIL_V_MSG(false, "Malformed zstd input for decompressing shader code.");
 		}
+#else
+		ERR_FAIL_V_MSG(false, "Zstd decompression is not supported in this build.");
+#endif
 	} else {
 		memcpy(p_decompressed_bytes, p_compressed_bytes, MIN(p_compressed_size, p_decompressed_size));
 	}

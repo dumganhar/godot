@@ -32,7 +32,9 @@
 
 #include "core/debugger/engine_debugger.h"
 
+#ifndef DEBUGGER_DISABLED
 thread_local Vector<ScriptDebugger::StackInfo> ScriptDebugger::error_stack_info;
+#endif
 
 void ScriptDebugger::set_lines_left(int p_left) {
 	lines_left = p_left;
@@ -85,21 +87,29 @@ bool ScriptDebugger::is_ignoring_error_breaks() {
 }
 
 void ScriptDebugger::debug(ScriptLanguage *p_lang, bool p_can_continue, bool p_is_error_breakpoint) {
+#ifndef DEBUGGER_DISABLED
 	ScriptLanguage *prev = break_lang;
 	break_lang = p_lang;
 	EngineDebugger::get_singleton()->debug(p_can_continue, p_is_error_breakpoint);
 	break_lang = prev;
+#endif
 }
 
 void ScriptDebugger::send_error(const String &p_func, const String &p_file, int p_line, const String &p_err, const String &p_descr, bool p_editor_notify, ErrorHandlerType p_type, const Vector<StackInfo> &p_stack_info) {
+#ifndef DEBUGGER_DISABLED
 	// Store stack info, this is ugly, but allows us to separate EngineDebugger and ScriptDebugger. There might be a better way.
 	error_stack_info.append_array(p_stack_info);
 	EngineDebugger::get_singleton()->send_error(p_func, p_file, p_line, p_err, p_descr, p_editor_notify, p_type);
 	error_stack_info.clear(); // Clear because this is thread local
+#endif
 }
 
 Vector<ScriptLanguage::StackInfo> ScriptDebugger::get_error_stack_info() const {
+#ifndef DEBUGGER_DISABLED
 	return error_stack_info;
+#else
+	return Vector<ScriptLanguage::StackInfo>();
+#endif
 }
 
 ScriptLanguage *ScriptDebugger::get_break_language() const {
