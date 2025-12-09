@@ -93,7 +93,9 @@ Node *InstancePlaceholder::create_instance(bool p_replace, const Ref<PackedScene
 		return nullptr;
 	}
 	instance->set_name(get_name());
+#ifndef MULTIPLAYER_DISABLED
 	instance->set_multiplayer_authority(get_multiplayer_authority());
+#endif
 	int pos = get_index();
 
 	for (const PropSet &E : stored_values) {

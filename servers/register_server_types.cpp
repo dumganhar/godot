@@ -57,8 +57,10 @@
 #include "audio/effects/audio_stream_generator.h"
 #endif // AUDIO_EFFECTS_DISABLED
 #include "audio_server.h"
+#ifndef CAMERA_SERVER_DISABLED
 #include "camera/camera_feed.h"
 #include "camera_server.h"
+#endif
 #ifndef SERVERS_DEBUGGER_DISABLED
 #include "debugger/servers_debugger.h"
 #endif
@@ -171,7 +173,9 @@ void register_server_types() {
 
 	GDREGISTER_CLASS(NativeMenu);
 
+#ifndef CAMERA_SERVER_DISABLED
 	GDREGISTER_CLASS(CameraServer);
+#endif
 
 	GDREGISTER_ABSTRACT_CLASS(RenderingDevice);
 
@@ -271,7 +275,9 @@ void register_server_types() {
 	GDREGISTER_CLASS(FramebufferCacheRD);
 	GDREGISTER_CLASS(UniformSetCacheRD);
 
+#ifndef CAMERA_SERVER_DISABLED
 	GDREGISTER_CLASS(CameraFeed);
+#endif
 
 #ifndef MOVIE_WRITER_DISABLED
 	GDREGISTER_VIRTUAL_CLASS(MovieWriter);
@@ -393,7 +399,9 @@ void register_server_singletons() {
 	OS::get_singleton()->benchmark_begin_measure("Servers", "Register Singletons");
 
 	Engine::get_singleton()->add_singleton(Engine::Singleton("AudioServer", AudioServer::get_singleton(), "AudioServer"));
+#ifndef CAMERA_SERVER_DISABLED
 	Engine::get_singleton()->add_singleton(Engine::Singleton("CameraServer", CameraServer::get_singleton(), "CameraServer"));
+#endif
 	Engine::get_singleton()->add_singleton(Engine::Singleton("DisplayServer", DisplayServer::get_singleton(), "DisplayServer"));
 	Engine::get_singleton()->add_singleton(Engine::Singleton("NativeMenu", NativeMenu::get_singleton(), "NativeMenu"));
 	Engine::get_singleton()->add_singleton(Engine::Singleton("RenderingServer", RenderingServer::get_singleton(), "RenderingServer"));

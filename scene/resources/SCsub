@@ -26,12 +26,17 @@ env.scene_sources += thirdparty_obj
 
 scene_obj = []
 
-if env["disable_audio_stream_wav"]:
-    # Exclude audio_stream_wav.cpp when disabled
+if env["disable_audio_stream_wav"] or env["disable_camera_server"]:
+    # Exclude files when disabled
     import glob
     import os
     cpp_files = glob.glob(os.path.join(str(Dir(".").srcnode()), "*.cpp"))
-    cpp_files = [os.path.basename(f) for f in cpp_files if "audio_stream_wav" not in f]
+    exclude_patterns = []
+    if env["disable_audio_stream_wav"]:
+        exclude_patterns.append("audio_stream_wav")
+    if env["disable_camera_server"]:
+        exclude_patterns.append("camera_texture")
+    cpp_files = [os.path.basename(f) for f in cpp_files if not any(pattern in f for pattern in exclude_patterns)]
     for f in cpp_files:
         env.add_source_files(scene_obj, f)
 else:

@@ -47,7 +47,9 @@ class Node3D;
 class Window;
 class Material;
 class Mesh;
+#ifndef MULTIPLAYER_DISABLED
 class MultiplayerAPI;
+#endif
 class SceneDebugger;
 class Tween;
 class Viewport;
@@ -218,9 +220,11 @@ private:
 
 	///network///
 
+#ifndef MULTIPLAYER_DISABLED
 	Ref<MultiplayerAPI> multiplayer;
 	HashMap<NodePath, Ref<MultiplayerAPI>> custom_multiplayers;
 	bool multiplayer_poll = true;
+#endif
 
 	static SceneTree *singleton;
 	friend class Node;
@@ -442,10 +446,12 @@ public:
 
 	//network API
 
+#ifndef MULTIPLAYER_DISABLED
 	Ref<MultiplayerAPI> get_multiplayer(const NodePath &p_for_path = NodePath()) const;
 	void set_multiplayer(Ref<MultiplayerAPI> p_multiplayer, const NodePath &p_root_path = NodePath());
 	void set_multiplayer_poll_enabled(bool p_enabled);
 	bool is_multiplayer_poll_enabled() const;
+#endif
 
 	static void add_idle_callback(IdleCallback p_callback);
 

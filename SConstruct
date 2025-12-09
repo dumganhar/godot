@@ -246,6 +246,10 @@ opts.Add(BoolVariable("disable_audio_3d", "Disable 3D audio (AudioStreamPlayer3D
 opts.Add(BoolVariable("disable_audio_stream_wav", "Disable AudioStreamWAV", False))
 opts.Add(BoolVariable("disable_audio_effects", "Disable audio effects (AudioEffect*)", False))
 opts.Add(BoolVariable("disable_controller_mappings", "Disable controller/gamepad mappings", False))
+opts.Add(BoolVariable("disable_video_stream_player", "Disable VideoStreamPlayer", False))
+opts.Add(BoolVariable("disable_camera_server", "Disable CameraServer", False))
+opts.Add(BoolVariable("disable_multiplayer", "Disable multiplayer (MultiplayerAPI, MultiplayerPeer)", False))
+opts.Add(BoolVariable("disable_fsr2", "Disable AMD FSR2 upscaling", False))
 opts.Add("build_profile", "Path to a file containing a feature build profile", "")
 opts.Add("custom_modules", "A list of comma-separated directory paths containing custom modules to build.", "")
 opts.Add(BoolVariable("custom_modules_recursive", "Detect custom modules recursively for each specified path.", True))
@@ -1039,6 +1043,14 @@ if env["disable_audio_effects"]:
     env.Append(CPPDEFINES=["AUDIO_EFFECTS_DISABLED"])
 if env["disable_controller_mappings"]:
     env.Append(CPPDEFINES=["CONTROLLER_MAPPINGS_DISABLED"])
+if env["disable_video_stream_player"]:
+    env.Append(CPPDEFINES=["VIDEO_STREAM_PLAYER_DISABLED"])
+if env["disable_camera_server"]:
+    env.Append(CPPDEFINES=["CAMERA_SERVER_DISABLED"])
+if env["disable_multiplayer"]:
+    env.Append(CPPDEFINES=["MULTIPLAYER_DISABLED"])
+if env["disable_fsr2"]:
+    env.Append(CPPDEFINES=["FSR2_DISABLED"])
 if env["builtin_zstd"]:
     env.Append(CPPDEFINES=["ZSTD_ENABLED"])
 

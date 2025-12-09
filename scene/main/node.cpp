@@ -39,7 +39,9 @@
 #include "instance_placeholder.h"
 #include "scene/animation/tween.h"
 #include "scene/debugger/scene_debugger.h"
+#ifndef MULTIPLAYER_DISABLED
 #include "scene/main/multiplayer_api.h"
+#endif
 #include "scene/main/window.h"
 #include "scene/resources/packed_scene.h"
 #include "viewport.h"
@@ -757,6 +759,7 @@ void Node::_propagate_process_owner(Node *p_owner, int p_pause_notification, int
 	data.blocked--;
 }
 
+#ifndef MULTIPLAYER_DISABLED
 void Node::set_multiplayer_authority(int p_peer_id, bool p_recursive) {
 	ERR_THREAD_GUARD
 	data.multiplayer_authority = p_peer_id;
@@ -867,6 +870,7 @@ Ref<MultiplayerAPI> Node::get_multiplayer() const {
 	}
 	return data.tree->get_multiplayer(get_path());
 }
+#endif // MULTIPLAYER_DISABLED
 
 //////////// end of rpc
 
@@ -3825,6 +3829,7 @@ void Node::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("request_ready"), &Node::request_ready);
 	ClassDB::bind_method(D_METHOD("is_node_ready"), &Node::is_ready);
 
+#ifndef MULTIPLAYER_DISABLED
 	ClassDB::bind_method(D_METHOD("set_multiplayer_authority", "id", "recursive"), &Node::set_multiplayer_authority, DEFVAL(true));
 	ClassDB::bind_method(D_METHOD("get_multiplayer_authority"), &Node::get_multiplayer_authority);
 
@@ -3833,6 +3838,7 @@ void Node::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_multiplayer"), &Node::get_multiplayer);
 	ClassDB::bind_method(D_METHOD("rpc_config", "method", "config"), &Node::rpc_config);
 	ClassDB::bind_method(D_METHOD("get_node_rpc_config"), &Node::_get_node_rpc_config_bind);
+#endif
 
 	ClassDB::bind_method(D_METHOD("set_editor_description", "editor_description"), &Node::set_editor_description);
 	ClassDB::bind_method(D_METHOD("get_editor_description"), &Node::get_editor_description);
@@ -3852,6 +3858,7 @@ void Node::_bind_methods() {
 
 	ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "_import_path", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR | PROPERTY_USAGE_INTERNAL), "_set_import_path", "_get_import_path");
 
+#ifndef MULTIPLAYER_DISABLED
 	{
 		MethodInfo mi;
 
@@ -3860,6 +3867,7 @@ void Node::_bind_methods() {
 		mi.name = "rpc";
 		ClassDB::bind_vararg_method(METHOD_FLAGS_DEFAULT, "rpc", &Node::_rpc_bind, mi);
 	}
+
 
 	{
 		MethodInfo mi;
@@ -3870,7 +3878,7 @@ void Node::_bind_methods() {
 		mi.name = "rpc_id";
 		ClassDB::bind_vararg_method(METHOD_FLAGS_DEFAULT, "rpc_id", &Node::_rpc_id_bind, mi);
 	}
-
+#endif
 	ClassDB::bind_method(D_METHOD("update_configuration_warnings"), &Node::update_configuration_warnings);
 
 	{
@@ -3991,7 +3999,9 @@ void Node::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "unique_name_in_owner", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR), "set_unique_name_in_owner", "is_unique_name_in_owner");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "scene_file_path", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NONE), "set_scene_file_path", "get_scene_file_path");
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "owner", PROPERTY_HINT_RESOURCE_TYPE, "Node", PROPERTY_USAGE_NONE), "set_owner", "get_owner");
+#ifndef MULTIPLAYER_DISABLED
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "multiplayer", PROPERTY_HINT_RESOURCE_TYPE, "MultiplayerAPI", PROPERTY_USAGE_NONE), "", "get_multiplayer");
+#endif
 
 	ADD_GROUP("Process", "process_");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "process_mode", PROPERTY_HINT_ENUM, "Inherit,Pausable,When Paused,Always,Disabled"), "set_process_mode", "get_process_mode");

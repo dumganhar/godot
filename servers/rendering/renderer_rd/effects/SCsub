@@ -11,11 +11,12 @@ env_effects = env.Clone()
 
 thirdparty_obj = []
 
-thirdparty_dir = "#thirdparty/amd-fsr2/"
-thirdparty_sources = ["ffx_assert.cpp", "ffx_fsr2.cpp"]
-thirdparty_sources = [thirdparty_dir + file for file in thirdparty_sources]
+if not env["disable_fsr2"]:
+    thirdparty_dir = "#thirdparty/amd-fsr2/"
+    thirdparty_sources = ["ffx_assert.cpp", "ffx_fsr2.cpp"]
+    thirdparty_sources = [thirdparty_dir + file for file in thirdparty_sources]
 
-env_effects.Prepend(CPPPATH=[thirdparty_dir])
+    env_effects.Prepend(CPPPATH=[thirdparty_dir])
 
 
 def areatex_builder(target, source, env):
@@ -57,18 +58,28 @@ env.CommandNoCache("smaa_search_tex.gen.h", "#thirdparty/smaa/SearchTex.png", en
 
 # This flag doesn't actually control anything GCC specific in FSR2. It determines
 # if symbols should be exported, which is not required for Godot.
-env_effects.Append(CPPDEFINES=["FFX_GCC"])
+if not env["disable_fsr2"]:
+    env_effects.Append(CPPDEFINES=["FFX_GCC"])
 
-env_thirdparty = env_effects.Clone()
-env_thirdparty.disable_warnings()
-env_thirdparty.add_source_files(thirdparty_obj, thirdparty_sources)
-env.servers_sources += thirdparty_obj
+    env_thirdparty = env_effects.Clone()
+    env_thirdparty.disable_warnings()
+    env_thirdparty.add_source_files(thirdparty_obj, thirdparty_sources)
+    env.servers_sources += thirdparty_obj
 
 # Godot source files
 
 module_obj = []
 
-env_effects.add_source_files(module_obj, "*.cpp")
+if env["disable_fsr2"]:
+    # Exclude fsr2.cpp when disabled
+    import glob
+    import os
+    cpp_files = glob.glob(os.path.join(str(Dir(".").srcnode()), "*.cpp"))
+    cpp_files = [os.path.basename(f) for f in cpp_files if "fsr2" not in f]
+    for f in cpp_files:
+        env_effects.add_source_files(module_obj, f)
+else:
+    env_effects.add_source_files(module_obj, "*.cpp")
 if env["metal"]:
     env_effects.add_source_files(module_obj, "metal_fx.mm")
 env.servers_sources += module_obj

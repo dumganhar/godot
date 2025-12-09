@@ -6,7 +6,8 @@ Import("env")
 env.servers_sources = []
 
 env.add_source_files(env.servers_sources, "audio_server.cpp")
-env.add_source_files(env.servers_sources, "camera_server.cpp")
+if not env["disable_camera_server"]:
+    env.add_source_files(env.servers_sources, "camera_server.cpp")
 env.add_source_files(env.servers_sources, "display_server.cpp")
 env.add_source_files(env.servers_sources, "register_server_types.cpp")
 env.add_source_files(env.servers_sources, "rendering_server.cpp")
@@ -19,7 +20,8 @@ if not env["disable_navigation_3d"]:
     env.add_source_files(env.servers_sources, "navigation_server_3d.cpp")
 
 SConscript("audio/SCsub")
-SConscript("camera/SCsub")
+if not env["disable_camera_server"]:
+    SConscript("camera/SCsub")
 if not env["disable_servers_debugger"]:
     SConscript("debugger/SCsub")
 SConscript("display/SCsub")

@@ -70,7 +70,9 @@
 #include "scene/theme/theme_db.h"
 #include "servers/audio/audio_driver_dummy.h"
 #include "servers/audio_server.h"
+#ifndef CAMERA_SERVER_DISABLED
 #include "servers/camera_server.h"
+#endif
 #include "servers/display_server.h"
 #ifndef MOVIE_WRITER_DISABLED
 #include "servers/movie_writer/movie_writer.h"
@@ -174,7 +176,9 @@ static SteamTracker *steam_tracker = nullptr;
 
 // Initialized in setup2()
 static AudioServer *audio_server = nullptr;
+#ifndef CAMERA_SERVER_DISABLED
 static CameraServer *camera_server = nullptr;
+#endif
 static DisplayServer *display_server = nullptr;
 static RenderingServer *rendering_server = nullptr;
 static TextServerManager *tsman = nullptr;
@@ -3709,7 +3713,9 @@ Error Main::setup2(bool p_show_boot_logo) {
 
 	OS::get_singleton()->benchmark_begin_measure("Startup", "Finalize Setup");
 
+#ifndef CAMERA_SERVER_DISABLED
 	camera_server = CameraServer::create();
+#endif
 
 	MAIN_PRINT("Main: Load Physics");
 
@@ -5077,10 +5083,11 @@ void Main::cleanup(bool p_force) {
 		memdelete(audio_server);
 	}
 
+#ifndef CAMERA_SERVER_DISABLED
 	if (camera_server) {
 		memdelete(camera_server);
 	}
-
+#endif // CAMERA_SERVER_DISABLED
 	OS::get_singleton()->finalize();
 
 	finalize_display();

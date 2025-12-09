@@ -41,8 +41,11 @@
 
 #include "core/config/project_settings.h"
 #include "core/templates/sort_array.h"
+
+#ifndef CAMERA_SERVER_DISABLED
 #include "servers/camera/camera_feed.h"
 #include "servers/camera_server.h"
+#endif
 #include "servers/rendering/rendering_server_default.h"
 #include "servers/rendering/rendering_server_globals.h"
 
@@ -2455,9 +2458,11 @@ void RasterizerSceneGLES3::render_scene(const Ref<RenderSceneBuffers> &p_render_
 				keep_color = true;
 			} break;
 			case RS::ENV_BG_CAMERA_FEED: {
+#ifndef CAMERA_SERVER_DISABLED
 				camera_feed_id = environment_get_camera_feed_id(render_data.environment);
 				draw_feed = true;
 				keep_color = true;
+#endif
 			} break;
 			default: {
 			}
@@ -2630,6 +2635,7 @@ void RasterizerSceneGLES3::render_scene(const Ref<RenderSceneBuffers> &p_render_
 		}
 	}
 
+#ifndef CAMERA_SERVER_DISABLED
 	if (draw_feed && camera_feed_id > -1) {
 		RENDER_TIMESTAMP("Render Camera feed");
 
@@ -2651,7 +2657,7 @@ void RasterizerSceneGLES3::render_scene(const Ref<RenderSceneBuffers> &p_render_
 		scene_state.enable_gl_depth_test(true);
 		scene_state.enable_gl_blend(true);
 	}
-
+#endif // CAMERA_SERVER_DISABLED
 	// Render Opaque Objects.
 	RenderListParameters render_list_params(render_list[RENDER_LIST_OPAQUE].elements.ptr(), render_list[RENDER_LIST_OPAQUE].elements.size(), reverse_cull, spec_constant_base_flags, use_wireframe);
 

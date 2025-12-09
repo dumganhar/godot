@@ -92,13 +92,17 @@
 #include "scene/gui/texture_progress_bar.h"
 #include "scene/gui/texture_rect.h"
 #include "scene/gui/tree.h"
+#ifndef VIDEO_STREAM_PLAYER_DISABLED
 #include "scene/gui/video_stream_player.h"
+#endif
 #include "scene/main/canvas_item.h"
 #include "scene/main/canvas_layer.h"
 #include "scene/main/http_request.h"
 #include "scene/main/instance_placeholder.h"
 #include "scene/main/missing_node.h"
+#ifndef MULTIPLAYER_DISABLED
 #include "scene/main/multiplayer_api.h"
+#endif
 #include "scene/main/resource_preloader.h"
 #include "scene/main/scene_tree.h"
 #include "scene/main/shader_globals_override.h"
@@ -115,7 +119,9 @@
 #include "scene/resources/bit_map.h"
 #include "scene/resources/bone_map.h"
 #include "scene/resources/camera_attributes.h"
+#ifndef CAMERA_SERVER_DISABLED
 #include "scene/resources/camera_texture.h"
+#endif
 #include "scene/resources/canvas_item_material.h"
 #include "scene/resources/color_palette.h"
 #include "scene/resources/compositor.h"
@@ -426,10 +432,12 @@ void register_scene_types() {
 
 	GDREGISTER_VIRTUAL_CLASS(CompositorEffect);
 
+#ifndef MULTIPLAYER_DISABLED
 	GDREGISTER_ABSTRACT_CLASS(MultiplayerPeer);
 	GDREGISTER_CLASS(MultiplayerPeerExtension);
 	GDREGISTER_ABSTRACT_CLASS(MultiplayerAPI);
 	GDREGISTER_CLASS(MultiplayerAPIExtension);
+#endif
 
 	GDREGISTER_CLASS(HTTPRequest);
 	GDREGISTER_CLASS(Timer);
@@ -497,9 +505,11 @@ void register_scene_types() {
 	GDREGISTER_CLASS(ItemList);
 
 	GDREGISTER_CLASS(LineEdit);
+#ifndef VIDEO_STREAM_PLAYER_DISABLED
 	GDREGISTER_CLASS(VideoStreamPlayer);
 	GDREGISTER_VIRTUAL_CLASS(VideoStreamPlayback);
 	GDREGISTER_VIRTUAL_CLASS(VideoStream);
+#endif
 
 #ifndef ADVANCED_GUI_DISABLED
 	GDREGISTER_CLASS(FileDialog);
@@ -1027,7 +1037,9 @@ void register_scene_types() {
 	GDREGISTER_CLASS(CurveXYZTexture);
 	GDREGISTER_CLASS(GradientTexture1D);
 	GDREGISTER_CLASS(GradientTexture2D);
+#ifndef CAMERA_SERVER_DISABLED
 	GDREGISTER_CLASS(CameraTexture);
+#endif
 	GDREGISTER_CLASS(ExternalTexture);
 	GDREGISTER_VIRTUAL_CLASS(TextureLayered);
 	GDREGISTER_ABSTRACT_CLASS(ImageTextureLayered);
@@ -1260,7 +1272,9 @@ void register_scene_types() {
 	ClassDB::add_compatibility_class("StaticBody", "StaticBody3D");
 	ClassDB::add_compatibility_class("StreamTexture", "CompressedTexture2D");
 	ClassDB::add_compatibility_class("TextureProgress", "TextureProgressBar");
+#ifndef VIDEO_STREAM_PLAYER_DISABLED
 	ClassDB::add_compatibility_class("VideoPlayer", "VideoStreamPlayer");
+#endif
 	ClassDB::add_compatibility_class("ViewportContainer", "SubViewportContainer");
 	ClassDB::add_compatibility_class("Viewport", "SubViewport");
 	ClassDB::add_compatibility_class("VisibilityEnabler", "VisibleOnScreenEnabler3D");

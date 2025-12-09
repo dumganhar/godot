@@ -201,8 +201,10 @@ private:
 		BitField<ProcessThreadMessages> process_thread_messages = {};
 		void *process_group = nullptr; // to avoid cyclic dependency
 
+#ifndef MULTIPLAYER_DISABLED
 		int multiplayer_authority = 1; // Server by default.
 		Variant rpc_config;
+#endif
 
 		// Variables used to properly sort the node when processing, ignored otherwise.
 		int process_priority = 0;
@@ -262,7 +264,9 @@ private:
 
 	} data;
 
+#ifndef MULTIPLAYER_DISABLED
 	Ref<MultiplayerAPI> multiplayer;
+#endif
 
 	String _get_tree_string_pretty(const String &p_prefix, bool p_last);
 	String _get_tree_string(const Node *p_node);
@@ -380,9 +384,11 @@ protected:
 
 	void _validate_property(PropertyInfo &p_property) const;
 
+#ifndef MULTIPLAYER_DISABLED
 	Variant _get_node_rpc_config_bind() const {
 		return get_node_rpc_config().duplicate(true);
 	}
+#endif
 
 protected:
 	virtual bool _uses_signal_mutex() const override { return false; } // Node uses thread guards instead.
@@ -756,6 +762,7 @@ public:
 
 	/* NETWORK */
 
+#ifndef MULTIPLAYER_DISABLED
 	virtual void set_multiplayer_authority(int p_peer_id, bool p_recursive = true);
 	int get_multiplayer_authority() const;
 	bool is_multiplayer_authority() const;
@@ -772,6 +779,7 @@ public:
 	Error rpcp(int p_peer_id, const StringName &p_method, const Variant **p_arg, int p_argcount);
 
 	Ref<MultiplayerAPI> get_multiplayer() const;
+#endif
 
 	/* INTERNATIONALIZATION */
 
@@ -861,6 +869,7 @@ typedef HashSet<Node *, Node::Comparator> NodeSet;
 // Template definitions must be in the header so they are always fully initialized before their usage.
 // See this StackOverflow question for more information: https://stackoverflow.com/questions/495021/why-can-templates-only-be-implemented-in-the-header-file
 
+#ifndef MULTIPLAYER_DISABLED
 template <typename... VarArgs>
 Error Node::rpc(const StringName &p_method, VarArgs... p_args) {
 	return rpc_id(0, p_method, p_args...);
@@ -875,6 +884,7 @@ Error Node::rpc_id(int p_peer_id, const StringName &p_method, VarArgs... p_args)
 	}
 	return rpcp(p_peer_id, p_method, sizeof...(p_args) == 0 ? nullptr : (const Variant **)argptrs, sizeof...(p_args));
 }
+#endif
 
 #ifdef DEBUG_ENABLED
 #define ERR_THREAD_GUARD ERR_FAIL_COND_MSG(!is_accessible_from_caller_thread(), vformat("Caller thread can't call this function in this node (%s). Use call_deferred() or call_thread_group() instead.", get_description()));

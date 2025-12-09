@@ -8,6 +8,10 @@ optimize = "size"
 disable_audio_3d = "yes"      # Disables only 3D audio (AudioStreamPlayer3D, AudioListener3D)
 disable_audio_stream_wav = "yes"  # Disables AudioStreamWAV
 disable_audio_effects = "yes"     # Disables all audio effects (AudioEffect*)
+disable_video_stream_player = "yes"  # Disables VideoStreamPlayer
+disable_camera_server = "yes"     # Disables CameraServer
+disable_multiplayer = "yes"       # Disables multiplayer (MultiplayerAPI, MultiplayerPeer)
+disable_fsr2 = "yes"              # Disables AMD FSR2 upscaling
 disable_debugger = "yes"
 disable_servers_debugger = "yes"  # Disables ServersDebugger
 disable_controller_mappings = "yes"  # Disables controller/gamepad mappings
@@ -24,6 +28,7 @@ deprecated = "no"
 minizip = "no"
 brotli = "no"
 vulkan = "no"
+accesskit = "no"
 
 # Builtin libraries
 builtin_zstd = "no"       # Disabled - compression.cpp uses ZSTD_ENABLED macro
@@ -47,6 +52,8 @@ module_godot_physics_3d_enabled = "no"
 module_jolt_physics_enabled = "no"
 module_interactive_music_enabled = "no"
 module_webp_enabled = "no"
+module_astcenc_enabled = "no"      # ASTC texture compression - disable if not using ASTC
+module_jpg_enabled = "no"          # JPEG support - disable if only using PNG
 module_glslang_enabled = "no"
 module_basis_universal_enabled = "no"
 module_bmp_enabled = "no"
