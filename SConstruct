@@ -250,6 +250,9 @@ opts.Add(BoolVariable("disable_video_stream_player", "Disable VideoStreamPlayer"
 opts.Add(BoolVariable("disable_camera_server", "Disable CameraServer", False))
 opts.Add(BoolVariable("disable_multiplayer", "Disable multiplayer (MultiplayerAPI, MultiplayerPeer)", False))
 opts.Add(BoolVariable("disable_fsr2", "Disable AMD FSR2 upscaling", False))
+opts.Add(BoolVariable("disable_http_request", "Disable HTTPRequest", False))
+opts.Add(BoolVariable("disable_scene_debugger", "Disable SceneDebugger", False))
+opts.Add(BoolVariable("disable_steam", "Disable Steam integration", False))
 opts.Add("build_profile", "Path to a file containing a feature build profile", "")
 opts.Add("custom_modules", "A list of comma-separated directory paths containing custom modules to build.", "")
 opts.Add(BoolVariable("custom_modules_recursive", "Detect custom modules recursively for each specified path.", True))
@@ -1051,6 +1054,12 @@ if env["disable_multiplayer"]:
     env.Append(CPPDEFINES=["MULTIPLAYER_DISABLED"])
 if env["disable_fsr2"]:
     env.Append(CPPDEFINES=["FSR2_DISABLED"])
+if env["disable_http_request"]:
+    env.Append(CPPDEFINES=["HTTP_REQUEST_DISABLED"])
+if env["disable_scene_debugger"]:
+    env.Append(CPPDEFINES=["SCENE_DEBUGGER_DISABLED"])
+if env["disable_steam"]:
+    env.Append(CPPDEFINES=["STEAM_DISABLED"])
 if env["builtin_zstd"]:
     env.Append(CPPDEFINES=["ZSTD_ENABLED"])
 

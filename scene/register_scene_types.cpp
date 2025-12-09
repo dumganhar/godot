@@ -43,7 +43,9 @@
 #include "scene/animation/animation_tree.h"
 #include "scene/animation/tween.h"
 #include "scene/audio/audio_stream_player.h"
+#ifndef SCENE_DEBUGGER_DISABLED
 #include "scene/debugger/scene_debugger.h"
+#endif
 #include "scene/gui/aspect_ratio_container.h"
 #include "scene/gui/box_container.h"
 #include "scene/gui/button.h"
@@ -97,7 +99,9 @@
 #endif
 #include "scene/main/canvas_item.h"
 #include "scene/main/canvas_layer.h"
+#ifndef HTTP_REQUEST_DISABLED
 #include "scene/main/http_request.h"
+#endif
 #include "scene/main/instance_placeholder.h"
 #include "scene/main/missing_node.h"
 #ifndef MULTIPLAYER_DISABLED
@@ -439,7 +443,9 @@ void register_scene_types() {
 	GDREGISTER_CLASS(MultiplayerAPIExtension);
 #endif
 
+#ifndef HTTP_REQUEST_DISABLED
 	GDREGISTER_CLASS(HTTPRequest);
+#endif
 	GDREGISTER_CLASS(Timer);
 	GDREGISTER_CLASS(CanvasLayer);
 	GDREGISTER_CLASS(CanvasModulate);
@@ -1408,7 +1414,9 @@ void register_scene_types() {
 		GraphEdit::init_shaders();
 	}
 
+#ifndef SCENE_DEBUGGER_DISABLED
 	SceneDebugger::initialize();
+#endif
 
 	OS::get_singleton()->benchmark_end_measure("Scene", "Register Types");
 }
@@ -1416,7 +1424,9 @@ void register_scene_types() {
 void unregister_scene_types() {
 	OS::get_singleton()->benchmark_begin_measure("Scene", "Unregister Types");
 
+#ifndef SCENE_DEBUGGER_DISABLED
 	SceneDebugger::deinitialize();
+#endif
 
 	if (GD_IS_CLASS_ENABLED(TextureLayered)) {
 		ResourceLoader::remove_resource_format_loader(resource_loader_texture_layered);

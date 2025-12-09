@@ -3,12 +3,17 @@ from misc.utility.scons_hints import *
 
 Import("env")
 
-if env["disable_multiplayer"]:
-    # Exclude multiplayer files when disabled
+if env["disable_multiplayer"] or env["disable_http_request"]:
+    # Exclude files when disabled
     import glob
     import os
     cpp_files = glob.glob(os.path.join(str(Dir(".").srcnode()), "*.cpp"))
-    cpp_files = [os.path.basename(f) for f in cpp_files if "multiplayer" not in f]
+    exclude_patterns = []
+    if env["disable_multiplayer"]:
+        exclude_patterns.append("multiplayer")
+    if env["disable_http_request"]:
+        exclude_patterns.append("http_request")
+    cpp_files = [os.path.basename(f) for f in cpp_files if not any(pattern in f for pattern in exclude_patterns)]
     for f in cpp_files:
         env.add_source_files(env.scene_sources, f)
 else:

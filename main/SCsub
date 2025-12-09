@@ -9,7 +9,16 @@ env.main_sources = []
 
 env_main = env.Clone()
 
-env_main.add_source_files(env.main_sources, "*.cpp")
+if env["disable_steam"]:
+    # Exclude steam_tracker.cpp when disabled
+    import glob
+    import os
+    cpp_files = glob.glob(os.path.join(str(Dir(".").srcnode()), "*.cpp"))
+    cpp_files = [os.path.basename(f) for f in cpp_files if "steam_tracker" not in f]
+    for f in cpp_files:
+        env_main.add_source_files(env.main_sources, f)
+else:
+    env_main.add_source_files(env.main_sources, "*.cpp")
 
 if env["steamapi"] and env.editor_build:
     env_main.Append(CPPDEFINES=["STEAMAPI_ENABLED"])

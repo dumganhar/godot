@@ -38,7 +38,9 @@
 #include "core/string/print_string.h"
 #include "instance_placeholder.h"
 #include "scene/animation/tween.h"
+#ifndef SCENE_DEBUGGER_DISABLED
 #include "scene/debugger/scene_debugger.h"
+#endif
 #ifndef MULTIPLAYER_DISABLED
 #include "scene/main/multiplayer_api.h"
 #endif
@@ -366,7 +368,9 @@ void Node::_propagate_enter_tree() {
 	data.blocked--;
 
 #ifdef DEBUG_ENABLED
+#ifndef SCENE_DEBUGGER_DISABLED
 	SceneDebugger::add_to_cache(data.scene_file_path, this);
+#endif
 #endif
 	// enter groups
 }
@@ -396,7 +400,9 @@ void Node::_propagate_exit_tree() {
 #ifdef DEBUG_ENABLED
 	if (!data.scene_file_path.is_empty()) {
 		// Only remove if file path is set (optimization).
+#ifndef SCENE_DEBUGGER_DISABLED
 		SceneDebugger::remove_from_cache(data.scene_file_path, this);
+#endif
 	}
 #endif
 	data.blocked++;

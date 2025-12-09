@@ -39,7 +39,9 @@
 #include "core/os/os.h"
 #include "node.h"
 #include "scene/animation/tween.h"
+#ifndef SCENE_DEBUGGER_DISABLED
 #include "scene/debugger/scene_debugger.h"
+#endif
 #include "scene/gui/control.h"
 #ifndef MULTIPLAYER_DISABLED
 #include "scene/main/multiplayer_api.h"

@@ -136,7 +136,7 @@
 #endif // DISABLE_DEPRECATED
 #endif // TOOLS_ENABLED
 
-#if defined(STEAMAPI_ENABLED)
+#if defined(STEAMAPI_ENABLED) && !defined(STEAM_DISABLED)
 #include "main/steam_tracker.h"
 #endif
 
@@ -170,7 +170,7 @@ static ZipArchive *zip_packed_data = nullptr;
 #endif
 static MessageQueue *message_queue = nullptr;
 
-#if defined(STEAMAPI_ENABLED)
+#if defined(STEAMAPI_ENABLED) && !defined(STEAM_DISABLED)
 static SteamTracker *steam_tracker = nullptr;
 #endif
 
@@ -2840,7 +2840,7 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 	Thread::release_main_thread(); // If setup2() is called from another thread, that one will become main thread, so preventively release this one.
 	set_current_thread_safe_for_nodes(false);
 
-#if defined(STEAMAPI_ENABLED)
+#if defined(STEAMAPI_ENABLED) && !defined(STEAM_DISABLED)
 	if (editor || project_manager) {
 		steam_tracker = memnew(SteamTracker);
 	}
@@ -2915,7 +2915,7 @@ error:
 
 	OS::get_singleton()->benchmark_end_measure("Startup", "Main::Setup");
 
-#if defined(STEAMAPI_ENABLED)
+#if defined(STEAMAPI_ENABLED) && !defined(STEAM_DISABLED)
 	if (steam_tracker) {
 		memdelete(steam_tracker);
 	}
@@ -5136,7 +5136,7 @@ void Main::cleanup(bool p_force) {
 	message_queue->flush();
 	memdelete(message_queue);
 
-#if defined(STEAMAPI_ENABLED)
+#if defined(STEAMAPI_ENABLED) && !defined(STEAM_DISABLED)
 	if (steam_tracker) {
 		memdelete(steam_tracker);
 	}
