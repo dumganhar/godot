@@ -3839,9 +3839,9 @@ void Main::setup_boot_logo() {
 #if defined(TOOLS_ENABLED) && !defined(NO_EDITOR_SPLASH)
 			Ref<Image> splash = (editor || project_manager) ? memnew(Image(boot_splash_editor_png)) : memnew(Image(boot_splash_png));
 #else
+
 			Ref<Image> splash = memnew(Image(boot_splash_png));
 #endif
-
 			MAIN_PRINT("Main: ClearColor");
 			RenderingServer::get_singleton()->set_default_clear_color(boot_bg_color);
 			MAIN_PRINT("Main: Image");

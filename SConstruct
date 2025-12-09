@@ -253,6 +253,7 @@ opts.Add(BoolVariable("disable_fsr2", "Disable AMD FSR2 upscaling", False))
 opts.Add(BoolVariable("disable_http_request", "Disable HTTPRequest", False))
 opts.Add(BoolVariable("disable_scene_debugger", "Disable SceneDebugger", False))
 opts.Add(BoolVariable("disable_steam", "Disable Steam integration", False))
+opts.Add(BoolVariable("disable_default_boot_logo", "Disable default boot logo for smaller binary", False))
 opts.Add("build_profile", "Path to a file containing a feature build profile", "")
 opts.Add("custom_modules", "A list of comma-separated directory paths containing custom modules to build.", "")
 opts.Add(BoolVariable("custom_modules_recursive", "Detect custom modules recursively for each specified path.", True))
@@ -629,7 +630,9 @@ if env["production"]:
     env["use_static_cpp"] = methods.get_cmdline_bool("use_static_cpp", True)
     env["debug_symbols"] = methods.get_cmdline_bool("debug_symbols", False)
     if env["platform"] == "android":
-        env["swappy"] = methods.get_cmdline_bool("swappy", True)
+        # Only set swappy=True if not explicitly disabled in custom.py or command line
+        if "swappy" not in ARGUMENTS:
+            env["swappy"] = env.get("swappy", True)
     # LTO "auto" means we handle the preferred option in each platform detect.py.
     env["lto"] = ARGUMENTS.get("lto", "auto")
 
@@ -1060,6 +1063,8 @@ if env["disable_scene_debugger"]:
     env.Append(CPPDEFINES=["SCENE_DEBUGGER_DISABLED"])
 if env["disable_steam"]:
     env.Append(CPPDEFINES=["STEAM_DISABLED"])
+if env["disable_default_boot_logo"]:
+    env.Append(CPPDEFINES=["NO_DEFAULT_BOOT_LOGO"])
 if env["builtin_zstd"]:
     env.Append(CPPDEFINES=["ZSTD_ENABLED"])
 

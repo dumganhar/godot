@@ -3,6 +3,8 @@
 
 production = "yes"
 optimize = "size"
+lto = "thin"  # Link-time optimization for smaller binary
+swappy = "no"  # Disables Swappy Frame Pacing
 
 # Core feature disables
 disable_audio_3d = "yes"      # Disables only 3D audio (AudioStreamPlayer3D, AudioListener3D)
@@ -26,6 +28,7 @@ disable_xr = "yes"
 disable_navigation_2d = "yes"
 disable_navigation_3d = "yes"
 deprecated = "no"
+disable_default_boot_logo = "yes"
 
 # Optional features
 minizip = "no"
