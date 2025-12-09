@@ -70,7 +70,9 @@
 #include "servers/audio_server.h"
 #include "servers/camera_server.h"
 #include "servers/display_server.h"
+#ifndef MOVIE_WRITER_DISABLED
 #include "servers/movie_writer/movie_writer.h"
+#endif // MOVIE_WRITER_DISABLED
 #include "servers/register_server_types.h"
 #include "servers/rendering/rendering_server_default.h"
 #include "servers/text/text_server_dummy.h"
@@ -272,7 +274,9 @@ static int frame_delay = 0;
 static int audio_output_latency = 0;
 static bool disable_render_loop = false;
 static int fixed_fps = -1;
+#ifndef MOVIE_WRITER_DISABLED
 static MovieWriter *movie_writer = nullptr;
+#endif // MOVIE_WRITER_DISABLED
 static bool disable_vsync = false;
 static bool print_fps = false;
 #ifdef TOOLS_ENABLED
@@ -3634,6 +3638,7 @@ Error Main::setup2(bool p_show_boot_logo) {
 
 		OS::get_singleton()->benchmark_end_measure("Scene", "Modules and Extensions");
 
+#ifndef MOVIE_WRITER_DISABLED
 		// We need to initialize the movie writer here in case
 		// one of the user-provided GDExtensions subclasses MovieWriter.
 		if (Engine::get_singleton()->get_write_movie_path() != String()) {
@@ -3643,6 +3648,7 @@ Error Main::setup2(bool p_show_boot_logo) {
 				Engine::get_singleton()->set_write_movie_path(String());
 			}
 		}
+#endif // MOVIE_WRITER_DISABLED
 	}
 
 	PackedStringArray extensions;
@@ -4625,9 +4631,11 @@ int Main::start() {
 		DisplayServer::get_singleton()->set_icon(icon);
 	}
 
+#ifndef MOVIE_WRITER_DISABLED
 	if (movie_writer) {
 		movie_writer->begin(DisplayServer::get_singleton()->window_get_size(), fixed_fps, Engine::get_singleton()->get_write_movie_path());
 	}
+#endif // MOVIE_WRITER_DISABLED
 
 	GDExtensionManager::get_singleton()->startup();
 
@@ -4879,9 +4887,11 @@ bool Main::iteration() {
 
 	iterating--;
 
+#ifndef MOVIE_WRITER_DISABLED
 	if (movie_writer) {
 		movie_writer->add_frame();
 	}
+#endif // MOVIE_WRITER_DISABLED
 
 #ifdef TOOLS_ENABLED
 	bool quit_after_timeout = false;
@@ -4962,10 +4972,11 @@ void Main::cleanup(bool p_force) {
 		TextServerManager::get_singleton()->get_interface(i)->cleanup();
 	}
 
+#ifndef MOVIE_WRITER_DISABLED
 	if (movie_writer) {
 		movie_writer->end();
 	}
-
+#endif // MOVIE_WRITER_DISABLED
 	ResourceLoader::clear_thread_load_tasks();
 
 	ResourceLoader::remove_custom_loaders();

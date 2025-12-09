@@ -31,18 +31,25 @@
 #include "register_types.h"
 
 #include "image_loader_libjpeg_turbo.h"
+
+#ifndef MOVIE_WRITER_DISABLED
 #include "movie_writer_mjpeg.h"
+#endif // MOVIE_WRITER_DISABLED
 
 static Ref<ImageLoaderLibJPEGTurbo> image_loader_libjpeg_turbo;
+#ifndef MOVIE_WRITER_DISABLED
 static MovieWriterMJPEG *writer_mjpeg = nullptr;
+#endif // MOVIE_WRITER_DISABLED
 
 void initialize_jpg_module(ModuleInitializationLevel p_level) {
 	switch (p_level) {
 		case MODULE_INITIALIZATION_LEVEL_SERVERS: {
+#ifndef MOVIE_WRITER_DISABLED
 			if (GD_IS_CLASS_ENABLED(MovieWriterMJPEG)) {
 				writer_mjpeg = memnew(MovieWriterMJPEG);
 				MovieWriter::add_writer(writer_mjpeg);
 			}
+#endif // MOVIE_WRITER_DISABLED
 		} break;
 
 		case MODULE_INITIALIZATION_LEVEL_SCENE: {
@@ -63,9 +70,11 @@ void uninitialize_jpg_module(ModuleInitializationLevel p_level) {
 		} break;
 
 		case MODULE_INITIALIZATION_LEVEL_SERVERS: {
+#ifndef MOVIE_WRITER_DISABLED
 			if (GD_IS_CLASS_ENABLED(MovieWriterMJPEG)) {
 				memdelete(writer_mjpeg);
 			}
+#endif // MOVIE_WRITER_DISABLED
 		} break;
 
 		default:

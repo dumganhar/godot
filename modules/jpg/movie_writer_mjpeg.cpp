@@ -29,6 +29,9 @@
 /**************************************************************************/
 
 #include "movie_writer_mjpeg.h"
+
+#ifndef MOVIE_WRITER_DISABLED
+
 #include "core/config/project_settings.h"
 
 uint32_t MovieWriterMJPEG::get_audio_mix_rate() const {
@@ -261,3 +264,5 @@ MovieWriterMJPEG::MovieWriterMJPEG() {
 	speaker_mode = AudioServer::SpeakerMode(int(GLOBAL_GET("editor/movie_writer/speaker_mode")));
 	quality = GLOBAL_GET("editor/movie_writer/video_quality");
 }
+
+#endif // MOVIE_WRITER_DISABLED

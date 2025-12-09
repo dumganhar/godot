@@ -30,6 +30,8 @@
 
 #pragma once
 
+#ifndef MOVIE_WRITER_DISABLED
+
 #include "servers/movie_writer/movie_writer.h"
 
 class MovieWriterMJPEG : public MovieWriter {
@@ -68,3 +70,4 @@ protected:
 public:
 	MovieWriterMJPEG();
 };
+#endif // MOVIE_WRITER_DISABLED
