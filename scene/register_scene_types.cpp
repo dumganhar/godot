@@ -109,7 +109,9 @@
 #include "scene/resources/animation_library.h"
 #include "scene/resources/atlas_texture.h"
 #include "scene/resources/audio_stream_polyphonic.h"
+#ifndef AUDIO_STREAM_WAV_DISABLED
 #include "scene/resources/audio_stream_wav.h"
+#endif
 #include "scene/resources/bit_map.h"
 #include "scene/resources/bone_map.h"
 #include "scene/resources/camera_attributes.h"
@@ -1091,7 +1093,9 @@ void register_scene_types() {
 	OS::get_singleton()->yield(); // may take time to init
 
 	GDREGISTER_CLASS(AudioStreamPlayer);
+#ifndef AUDIO_STREAM_WAV_DISABLED
 	GDREGISTER_CLASS(AudioStreamWAV);
+#endif
 	GDREGISTER_CLASS(AudioStreamPolyphonic);
 	GDREGISTER_ABSTRACT_CLASS(AudioStreamPlaybackPolyphonic);
 
@@ -1349,7 +1353,9 @@ void register_scene_types() {
 
 	// Renamed during 4.0 alpha, added to ease transition between alphas.
 	ClassDB::add_compatibility_class("AudioStreamOGGVorbis", "AudioStreamOggVorbis");
+#ifndef AUDIO_STREAM_WAV_DISABLED
 	ClassDB::add_compatibility_class("AudioStreamSample", "AudioStreamWAV");
+#endif
 	ClassDB::add_compatibility_class("OGGPacketSequence", "OggPacketSequence");
 	ClassDB::add_compatibility_class("StreamCubemap", "CompressedCubemap");
 	ClassDB::add_compatibility_class("StreamCubemapArray", "CompressedCubemapArray");

@@ -10,8 +10,10 @@ thirdparty_obj = []
 thirdparty_dir = "#thirdparty/misc/"
 thirdparty_sources = [
     "mikktspace.c",
-    "qoa.c",
 ]
+
+if not env["disable_audio_stream_wav"]:
+    thirdparty_sources.append("qoa.c")
 
 thirdparty_sources = [thirdparty_dir + file for file in thirdparty_sources]
 
@@ -24,7 +26,17 @@ env.scene_sources += thirdparty_obj
 
 scene_obj = []
 
-env.add_source_files(scene_obj, "*.cpp")
+if env["disable_audio_stream_wav"]:
+    # Exclude audio_stream_wav.cpp when disabled
+    import glob
+    import os
+    cpp_files = glob.glob(os.path.join(str(Dir(".").srcnode()), "*.cpp"))
+    cpp_files = [os.path.basename(f) for f in cpp_files if "audio_stream_wav" not in f]
+    for f in cpp_files:
+        env.add_source_files(scene_obj, f)
+else:
+    env.add_source_files(scene_obj, "*.cpp")
+
 env.scene_sources += scene_obj
 
 # Needed to force rebuilding the scene files when the thirdparty code is updated.

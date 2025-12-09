@@ -47,7 +47,9 @@
 #include "audio/effects/audio_effect_panner.h"
 #include "audio/effects/audio_effect_phaser.h"
 #include "audio/effects/audio_effect_pitch_shift.h"
+#ifndef AUDIO_STREAM_WAV_DISABLED
 #include "audio/effects/audio_effect_record.h"
+#endif
 #include "audio/effects/audio_effect_reverb.h"
 #include "audio/effects/audio_effect_spectrum_analyzer.h"
 #include "audio/effects/audio_effect_stereo_enhance.h"
@@ -214,7 +216,9 @@ void register_server_types() {
 		GDREGISTER_CLASS(AudioEffectHardLimiter);
 		GDREGISTER_CLASS(AudioEffectPitchShift);
 		GDREGISTER_CLASS(AudioEffectPhaser);
+#ifndef AUDIO_STREAM_WAV_DISABLED
 		GDREGISTER_CLASS(AudioEffectRecord);
+#endif
 		GDREGISTER_CLASS(AudioEffectSpectrumAnalyzer);
 		GDREGISTER_ABSTRACT_CLASS(AudioEffectSpectrumAnalyzerInstance);
 
