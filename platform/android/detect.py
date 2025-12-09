@@ -235,13 +235,18 @@ def configure(env: "SConsEnvironment"):
     env.Append(LINKFLAGS=["-Wl,--build-id"])
     env.Append(LINKFLAGS=["-Wl,-soname,libgodot_android.so"])
 
-    # Link libc++ statically
+    # Link libc++ statically instead of dynamically (libc++_shared.so)
+    # Use -nostdlib++ to prevent automatic linking of C++ standard library,
+    # then manually link libc++_static.a and libc++abi.a
     sysroot_path = os.path.join(toolchain_path, "sysroot")
-    libcxx_static_path = os.path.join(sysroot_path, "usr", "lib", lib_triple, "libc++_static.a")
-    if not os.path.exists(libcxx_static_path):
-        print_error(f'Cannot find libc++_static.a at "{libcxx_static_path}". Please ensure Android NDK is correctly installed.')
+    lib_path = os.path.join(sysroot_path, "usr", "lib", lib_triple)
+    libcxx_static = os.path.join(lib_path, "libc++_static.a")
+    libcxxabi = os.path.join(lib_path, "libc++abi.a")
+    if not os.path.exists(libcxx_static):
+        print_error(f'Cannot find libc++_static.a at "{libcxx_static}". Please ensure Android NDK is correctly installed.')
         sys.exit(255)
-    env.Append(LINKFLAGS=[libcxx_static_path])
+    env.Append(LINKFLAGS=["-nostdlib++"])
+    env.Append(LINKFLAGS=[libcxx_static, libcxxabi])
 
     env.Prepend(CPPPATH=["#platform/android"])
     env.Append(CPPDEFINES=["ANDROID_ENABLED", "UNIX_ENABLED"])
