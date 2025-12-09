@@ -133,12 +133,16 @@ def configure(env: "SConsEnvironment"):
 
     if env["arch"] == "arm32":
         target_triple = "armv7a-linux-androideabi"
+        lib_triple = "arm-linux-androideabi"  # For library paths
     elif env["arch"] == "arm64":
         target_triple = "aarch64-linux-android"
+        lib_triple = "aarch64-linux-android"
     elif env["arch"] == "x86_32":
         target_triple = "i686-linux-android"
+        lib_triple = "i686-linux-android"
     elif env["arch"] == "x86_64":
         target_triple = "x86_64-linux-android"
+        lib_triple = "x86_64-linux-android"
 
     target_option = ["-target", target_triple + str(get_min_sdk_version(env["ndk_platform"]))]
     env.Append(ASFLAGS=[target_option, "-c"])
@@ -230,6 +234,14 @@ def configure(env: "SConsEnvironment"):
     env.Append(LINKFLAGS=["-Wl,--gc-sections", "-Wl,--no-undefined", "-Wl,-z,now"])
     env.Append(LINKFLAGS=["-Wl,--build-id"])
     env.Append(LINKFLAGS=["-Wl,-soname,libgodot_android.so"])
+
+    # Link libc++ statically
+    sysroot_path = os.path.join(toolchain_path, "sysroot")
+    libcxx_static_path = os.path.join(sysroot_path, "usr", "lib", lib_triple, "libc++_static.a")
+    if not os.path.exists(libcxx_static_path):
+        print_error(f'Cannot find libc++_static.a at "{libcxx_static_path}". Please ensure Android NDK is correctly installed.')
+        sys.exit(255)
+    env.Append(LINKFLAGS=[libcxx_static_path])
 
     env.Prepend(CPPPATH=["#platform/android"])
     env.Append(CPPDEFINES=["ANDROID_ENABLED", "UNIX_ENABLED"])
