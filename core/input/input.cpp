@@ -32,7 +32,9 @@
 #include "input.compat.inc"
 
 #include "core/config/project_settings.h"
+#ifndef CONTROLLER_MAPPINGS_DISABLED
 #include "core/input/default_controller_mappings.h"
+#endif
 #include "core/input/input_map.h"
 #include "core/os/os.h"
 
@@ -1916,6 +1918,7 @@ bool Input::is_input_disabled() const {
 Input::Input() {
 	singleton = this;
 
+#ifndef CONTROLLER_MAPPINGS_DISABLED
 	// Parse default mappings.
 	{
 		int i = 0;
@@ -1923,6 +1926,7 @@ Input::Input() {
 			parse_mapping(DefaultControllerMappings::mappings[i++]);
 		}
 	}
+#endif
 
 	// If defined, parse SDL_GAMECONTROLLERCONFIG for possible new mappings/overrides.
 	String env_mapping = OS::get_singleton()->get_environment("SDL_GAMECONTROLLERCONFIG");
