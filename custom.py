@@ -7,6 +7,7 @@ optimize = "size"
 # Core feature disables
 disable_audio_3d = "yes"      # Disables only 3D audio (AudioStreamPlayer3D, AudioListener3D)
 disable_debugger = "yes"
+disable_servers_debugger = "yes"  # Disables ServersDebugger
 disable_movie_writer = "yes"
 disable_advanced_gui = "yes"
 disable_physics_2d = "yes"
@@ -81,3 +82,5 @@ module_vorbis_enabled = "no"
 module_webrtc_enabled = "no"
 module_websocket_enabled = "no"
 module_webxr_enabled = "no"
+module_etcpak_enabled = "no"
+module_bcdec_enabled = "no"

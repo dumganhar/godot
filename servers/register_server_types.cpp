@@ -55,7 +55,9 @@
 #include "audio_server.h"
 #include "camera/camera_feed.h"
 #include "camera_server.h"
+#ifndef SERVERS_DEBUGGER_DISABLED
 #include "debugger/servers_debugger.h"
+#endif
 #include "display/native_menu.h"
 #include "display_server.h"
 #ifndef MOVIE_WRITER_DISABLED
@@ -264,7 +266,9 @@ void register_server_types() {
 	GDREGISTER_VIRTUAL_CLASS(MovieWriter);
 #endif // MOVIE_WRITER_DISABLED
 
+#ifndef SERVERS_DEBUGGER_DISABLED
 	ServersDebugger::initialize();
+#endif
 
 #ifndef NAVIGATION_2D_DISABLED
 	GDREGISTER_ABSTRACT_CLASS(NavigationServer2D);
@@ -362,7 +366,9 @@ void register_server_types() {
 void unregister_server_types() {
 	OS::get_singleton()->benchmark_begin_measure("Servers", "Unregister Extensions");
 
+#ifndef SERVERS_DEBUGGER_DISABLED
 	ServersDebugger::deinitialize();
+#endif
 	memdelete(shader_types);
 #ifndef MOVIE_WRITER_DISABLED
 	if (GD_IS_CLASS_ENABLED(MovieWriterPNGWAV)) {

@@ -241,6 +241,7 @@ opts.Add(BoolVariable("disable_navigation_3d", "Disable 3D navigation features",
 opts.Add(BoolVariable("disable_xr", "Disable XR nodes and server", False))
 opts.Add(BoolVariable("disable_movie_writer", "Disable movie writer", False))
 opts.Add(BoolVariable("disable_debugger", "Disable debugger", False))
+opts.Add(BoolVariable("disable_servers_debugger", "Disable servers debugger (ServersDebugger)", False))
 opts.Add(BoolVariable("disable_audio_3d", "Disable 3D audio (AudioStreamPlayer3D, AudioListener3D)", False))
 opts.Add("build_profile", "Path to a file containing a feature build profile", "")
 opts.Add("custom_modules", "A list of comma-separated directory paths containing custom modules to build.", "")
@@ -1025,6 +1026,8 @@ if env["disable_movie_writer"]:
     env.Append(CPPDEFINES=["MOVIE_WRITER_DISABLED"])
 if env["disable_debugger"]:
     env.Append(CPPDEFINES=["DEBUGGER_DISABLED"])
+if env["disable_servers_debugger"]:
+    env.Append(CPPDEFINES=["SERVERS_DEBUGGER_DISABLED"])
 if env["disable_audio_3d"]:
     env.Append(CPPDEFINES=["AUDIO_3D_DISABLED"])
 if env["builtin_zstd"]:
