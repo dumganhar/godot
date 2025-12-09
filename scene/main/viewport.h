@@ -36,7 +36,9 @@
 #ifndef _3D_DISABLED
 class Camera3D;
 class CollisionObject3D;
+#ifndef AUDIO_3D_DISABLED
 class AudioListener3D;
+#endif
 class World3D;
 #endif // _3D_DISABLED
 
@@ -770,6 +772,7 @@ public:
 private:
 	// 3D audio, camera, physics, and world.
 	bool use_xr = false;
+#ifndef AUDIO_3D_DISABLED
 	friend class AudioListener3D;
 	AudioListener3D *audio_listener_3d = nullptr;
 	HashSet<AudioListener3D *> audio_listener_3d_set;
@@ -781,6 +784,7 @@ private:
 	bool _audio_listener_3d_add(AudioListener3D *p_listener); //true if first
 	void _audio_listener_3d_remove(AudioListener3D *p_listener);
 	void _audio_listener_3d_make_next_current(AudioListener3D *p_exclude);
+#endif // AUDIO_3D_DISABLED
 
 #ifndef PHYSICS_3D_DISABLED
 	void _collision_object_3d_input_event(CollisionObject3D *p_object, Camera3D *p_camera, const Ref<InputEvent> &p_input_event, const Vector3 &p_pos, const Vector3 &p_normal, int p_shape);
@@ -820,9 +824,11 @@ private:
 	void _propagate_exit_world_3d(Node *p_node);
 
 public:
+#ifndef AUDIO_3D_DISABLED
 	AudioListener3D *get_audio_listener_3d() const;
 	void set_as_audio_listener_3d(bool p_enable);
 	bool is_audio_listener_3d() const;
+#endif // AUDIO_3D_DISABLED
 
 	Camera3D *get_camera_3d() const;
 	void enable_camera_3d_override(bool p_enable);

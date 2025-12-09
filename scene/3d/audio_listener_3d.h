@@ -30,6 +30,8 @@
 
 #pragma once
 
+#ifndef AUDIO_3D_DISABLED
+
 #include "scene/3d/node_3d.h"
 #include "scene/3d/velocity_tracker_3d.h"
 
@@ -82,3 +84,5 @@ protected:
 };
 
 VARIANT_ENUM_CAST(AudioListener3D::DopplerTracking);
+
+#endif // AUDIO_3D_DISABLED

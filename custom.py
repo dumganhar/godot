@@ -5,6 +5,7 @@ production = "yes"
 optimize = "size"
 
 # Core feature disables
+disable_audio_3d = "yes"      # Disables only 3D audio (AudioStreamPlayer3D, AudioListener3D)
 disable_debugger = "yes"
 disable_movie_writer = "yes"
 disable_advanced_gui = "yes"

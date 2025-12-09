@@ -28,6 +28,8 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
+#ifndef AUDIO_3D_DISABLED
+
 #include "audio_stream_player_3d.h"
 #include "audio_stream_player_3d.compat.inc"
 
@@ -926,3 +928,5 @@ AudioStreamPlayer3D::AudioStreamPlayer3D() {
 AudioStreamPlayer3D::~AudioStreamPlayer3D() {
 	memdelete(internal);
 }
+
+#endif // AUDIO_3D_DISABLED

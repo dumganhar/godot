@@ -28,6 +28,8 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
+#ifndef AUDIO_3D_DISABLED
+
 #include "audio_listener_3d.h"
 
 #include "scene/main/viewport.h"
@@ -191,3 +193,5 @@ AudioListener3D::AudioListener3D() {
 
 AudioListener3D::~AudioListener3D() {
 }
+
+#endif // AUDIO_3D_DISABLED

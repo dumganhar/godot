@@ -51,7 +51,9 @@
 #include "servers/rendering/rendering_server_globals.h"
 
 #ifndef _3D_DISABLED
+#ifndef AUDIO_3D_DISABLED
 #include "scene/3d/audio_listener_3d.h"
+#endif
 #include "scene/3d/camera_3d.h"
 #include "scene/3d/world_environment.h"
 #endif // _3D_DISABLED
@@ -552,7 +554,9 @@ void Viewport::_notification(int p_what) {
 			_update_audio_listener_2d();
 #ifndef _3D_DISABLED
 			RenderingServer::get_singleton()->viewport_set_scenario(viewport, find_world_3d()->get_scenario());
+#ifndef AUDIO_3D_DISABLED
 			_update_audio_listener_3d();
+#endif
 #endif // _3D_DISABLED
 
 			add_to_group("_viewports");
@@ -581,6 +585,7 @@ void Viewport::_notification(int p_what) {
 
 		case NOTIFICATION_READY: {
 #ifndef _3D_DISABLED
+#ifndef AUDIO_3D_DISABLED
 			if (audio_listener_3d_set.size() && !audio_listener_3d) {
 				AudioListener3D *first = nullptr;
 				for (AudioListener3D *E : audio_listener_3d_set) {
@@ -593,6 +598,7 @@ void Viewport::_notification(int p_what) {
 					first->make_current();
 				}
 			}
+#endif // AUDIO_3D_DISABLED
 
 			if (camera_3d_set.size() && !camera_3d) {
 				// There are cameras but no current camera, pick first in tree and make it current.
@@ -4350,6 +4356,7 @@ void Viewport::assign_next_enabled_camera_2d(const StringName &p_camera_group) {
 }
 
 #ifndef _3D_DISABLED
+#ifndef AUDIO_3D_DISABLED
 AudioListener3D *Viewport::get_audio_listener_3d() const {
 	ERR_READ_THREAD_GUARD_V(nullptr);
 	return audio_listener_3d;
@@ -4425,6 +4432,7 @@ void Viewport::_audio_listener_3d_make_next_current(AudioListener3D *p_exclude) 
 		}
 	}
 }
+#endif // AUDIO_3D_DISABLED
 
 #ifndef PHYSICS_3D_DISABLED
 void Viewport::_collision_object_3d_input_event(CollisionObject3D *p_object, Camera3D *p_camera, const Ref<InputEvent> &p_input_event, const Vector3 &p_pos, const Vector3 &p_normal, int p_shape) {
@@ -4477,7 +4485,9 @@ void Viewport::_camera_3d_set(Camera3D *p_camera) {
 		camera_3d->notification(Camera3D::NOTIFICATION_BECAME_CURRENT);
 	}
 
+#ifndef AUDIO_3D_DISABLED
 	_update_audio_listener_3d();
+#endif
 	_camera_3d_transform_changed_notify();
 }
 
@@ -4713,7 +4723,9 @@ void Viewport::set_world_3d(const Ref<World3D> &p_world_3d) {
 		RenderingServer::get_singleton()->viewport_set_scenario(viewport, find_world_3d()->get_scenario());
 	}
 
+#ifndef AUDIO_3D_DISABLED
 	_update_audio_listener_3d();
+#endif
 }
 
 void Viewport::_own_world_3d_changed() {
@@ -4734,7 +4746,9 @@ void Viewport::_own_world_3d_changed() {
 		RenderingServer::get_singleton()->viewport_set_scenario(viewport, find_world_3d()->get_scenario());
 	}
 
+#ifndef AUDIO_3D_DISABLED
 	_update_audio_listener_3d();
+#endif
 }
 
 void Viewport::set_use_own_world_3d(bool p_use_own_world_3d) {
@@ -4769,7 +4783,9 @@ void Viewport::set_use_own_world_3d(bool p_use_own_world_3d) {
 		RenderingServer::get_singleton()->viewport_set_scenario(viewport, find_world_3d()->get_scenario());
 	}
 
+#ifndef AUDIO_3D_DISABLED
 	_update_audio_listener_3d();
+#endif
 }
 
 bool Viewport::is_using_own_world_3d() const {
@@ -5107,10 +5123,12 @@ void Viewport::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_use_own_world_3d", "enable"), &Viewport::set_use_own_world_3d);
 	ClassDB::bind_method(D_METHOD("is_using_own_world_3d"), &Viewport::is_using_own_world_3d);
 
+#ifndef AUDIO_3D_DISABLED
 	ClassDB::bind_method(D_METHOD("get_audio_listener_3d"), &Viewport::get_audio_listener_3d);
-	ClassDB::bind_method(D_METHOD("get_camera_3d"), &Viewport::get_camera_3d);
 	ClassDB::bind_method(D_METHOD("set_as_audio_listener_3d", "enable"), &Viewport::set_as_audio_listener_3d);
 	ClassDB::bind_method(D_METHOD("is_audio_listener_3d"), &Viewport::is_audio_listener_3d);
+#endif
+	ClassDB::bind_method(D_METHOD("get_camera_3d"), &Viewport::get_camera_3d);
 
 	ClassDB::bind_method(D_METHOD("set_disable_3d", "disable"), &Viewport::set_disable_3d);
 	ClassDB::bind_method(D_METHOD("is_3d_disabled"), &Viewport::is_3d_disabled);
@@ -5181,7 +5199,9 @@ void Viewport::_bind_methods() {
 	ADD_GROUP("Audio Listener", "audio_listener_");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "audio_listener_enable_2d"), "set_as_audio_listener_2d", "is_audio_listener_2d");
 #ifndef _3D_DISABLED
+#ifndef AUDIO_3D_DISABLED
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "audio_listener_enable_3d"), "set_as_audio_listener_3d", "is_audio_listener_3d");
+#endif // AUDIO_3D_DISABLED
 #endif // _3D_DISABLED
 #if !defined(PHYSICS_2D_DISABLED) || !defined(PHYSICS_3D_DISABLED)
 	ADD_GROUP("Physics", "physics_");

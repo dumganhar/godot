@@ -215,8 +215,10 @@
 
 #ifndef _3D_DISABLED
 #include "scene/3d/aim_modifier_3d.h"
+#ifndef AUDIO_3D_DISABLED
 #include "scene/3d/audio_listener_3d.h"
 #include "scene/3d/audio_stream_player_3d.h"
+#endif
 #include "scene/3d/bone_attachment_3d.h"
 #include "scene/3d/bone_constraint_3d.h"
 #include "scene/3d/camera_3d.h"
@@ -600,7 +602,9 @@ void register_scene_types() {
 	GDREGISTER_VIRTUAL_CLASS(VisualInstance3D);
 	GDREGISTER_VIRTUAL_CLASS(GeometryInstance3D);
 	GDREGISTER_CLASS(Camera3D);
+#ifndef AUDIO_3D_DISABLED
 	GDREGISTER_CLASS(AudioListener3D);
+#endif
 #ifndef XR_DISABLED
 	GDREGISTER_CLASS(XRCamera3D);
 	GDREGISTER_CLASS(XRNode3D);
@@ -954,7 +958,9 @@ void register_scene_types() {
 	GDREGISTER_CLASS(MeshDataTool);
 
 #ifndef _3D_DISABLED
+#ifndef AUDIO_3D_DISABLED
 	GDREGISTER_CLASS(AudioStreamPlayer3D);
+#endif
 	GDREGISTER_VIRTUAL_CLASS(PrimitiveMesh);
 	GDREGISTER_CLASS(BoxMesh);
 	GDREGISTER_CLASS(CapsuleMesh);
@@ -1212,7 +1218,9 @@ void register_scene_types() {
 	ClassDB::add_compatibility_class("Light", "Light3D");
 	ClassDB::add_compatibility_class("Light2D", "PointLight2D");
 	ClassDB::add_compatibility_class("LineShape2D", "WorldBoundaryShape2D");
+#ifndef AUDIO_3D_DISABLED
 	ClassDB::add_compatibility_class("Listener", "AudioListener3D");
+#endif
 	ClassDB::add_compatibility_class("MeshInstance", "MeshInstance3D");
 	ClassDB::add_compatibility_class("MultiMeshInstance", "MultiMeshInstance3D");
 #ifndef NAVIGATION_3D_DISABLED

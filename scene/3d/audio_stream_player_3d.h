@@ -30,6 +30,8 @@
 
 #pragma once
 
+#ifndef AUDIO_3D_DISABLED
+
 #include "scene/3d/node_3d.h"
 #include "servers/audio_server.h"
 
@@ -214,3 +216,5 @@ public:
 
 VARIANT_ENUM_CAST(AudioStreamPlayer3D::AttenuationModel)
 VARIANT_ENUM_CAST(AudioStreamPlayer3D::DopplerTracking)
+
+#endif // AUDIO_3D_DISABLED

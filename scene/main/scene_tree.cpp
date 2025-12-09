@@ -2050,7 +2050,9 @@ SceneTree::SceneTree() {
 	if (root->get_world_3d().is_null()) {
 		root->set_world_3d(Ref<World3D>(memnew(World3D)));
 	}
+#ifndef AUDIO_3D_DISABLED
 	root->set_as_audio_listener_3d(true);
+#endif
 #endif // _3D_DISABLED
 
 	set_physics_interpolation_enabled(GLOBAL_DEF("physics/common/physics_interpolation", false));
