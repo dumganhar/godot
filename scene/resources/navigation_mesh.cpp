@@ -30,9 +30,9 @@
 
 #include "navigation_mesh.h"
 
-#ifdef DEBUG_ENABLED
+#if defined(DEBUG_ENABLED) && !defined(NAVIGATION_3D_DISABLED)
 #include "servers/navigation_server_3d.h"
-#endif // DEBUG_ENABLED
+#endif // defined(DEBUG_ENABLED) && !defined(NAVIGATION_3D_DISABLED)
 
 void NavigationMesh::create_from_mesh(const Ref<Mesh> &p_mesh) {
 	RWLockWrite write_lock(rwlock);
@@ -385,7 +385,7 @@ void NavigationMesh::get_data(Vector<Vector3> &r_vertices, Vector<Vector<int>> &
 	r_polygons = polygons;
 }
 
-#ifdef DEBUG_ENABLED
+#if defined(DEBUG_ENABLED) && !defined(NAVIGATION_3D_DISABLED)
 Ref<ArrayMesh> NavigationMesh::get_debug_mesh() {
 	if (debug_mesh.is_valid()) {
 		// Blocks further updates for now, code below is intended for dynamic updates e.g. when settings change.
@@ -478,7 +478,7 @@ Ref<ArrayMesh> NavigationMesh::get_debug_mesh() {
 
 	return debug_mesh;
 }
-#endif // DEBUG_ENABLED
+#endif // defined(DEBUG_ENABLED) && !defined(NAVIGATION_3D_DISABLED)
 
 void NavigationMesh::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_sample_partition_type", "sample_partition_type"), &NavigationMesh::set_sample_partition_type);

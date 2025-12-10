@@ -509,7 +509,9 @@ if env["optimize"] == "auto":
         opt_level = "speed"
     env["optimize"] = ARGUMENTS.get("optimize", opt_level)
 
-env["debug_symbols"] = methods.get_cmdline_bool("debug_symbols", env.dev_build)
+# Respect debug_symbols from custom.py, fallback to dev_build default
+if "debug_symbols" not in ARGUMENTS:
+    env["debug_symbols"] = env.get("debug_symbols", env.dev_build)
 
 if env.editor_build:
     env.Append(CPPDEFINES=["TOOLS_ENABLED"])

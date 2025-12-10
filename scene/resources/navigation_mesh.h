@@ -40,7 +40,9 @@ class NavigationMesh : public Resource {
 
 	Vector<Vector3> vertices;
 	Vector<Vector<int>> polygons;
+#if defined(DEBUG_ENABLED) && !defined(NAVIGATION_3D_DISABLED)
 	Ref<ArrayMesh> debug_mesh;
+#endif // defined(DEBUG_ENABLED) && !defined(NAVIGATION_3D_DISABLED)
 
 protected:
 	static void _bind_methods();
@@ -199,9 +201,9 @@ public:
 	void set_data(const Vector<Vector3> &p_vertices, const Vector<Vector<int>> &p_polygons);
 	void get_data(Vector<Vector3> &r_vertices, Vector<Vector<int>> &r_polygons);
 
-#ifdef DEBUG_ENABLED
+#if defined(DEBUG_ENABLED) && !defined(NAVIGATION_3D_DISABLED)
 	Ref<ArrayMesh> get_debug_mesh();
-#endif // DEBUG_ENABLED
+#endif // defined(DEBUG_ENABLED) && !defined(NAVIGATION_3D_DISABLED)
 };
 
 VARIANT_ENUM_CAST(NavigationMesh::SamplePartitionType);

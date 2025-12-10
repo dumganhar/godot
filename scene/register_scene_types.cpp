@@ -60,9 +60,11 @@
 #include "scene/gui/file_dialog.h"
 #include "scene/gui/flow_container.h"
 #include "scene/gui/foldable_container.h"
+#if !defined(ADVANCED_GUI_DISABLED) && !defined(_2D_NODES_DISABLED)
 #include "scene/gui/graph_edit.h"
 #include "scene/gui/graph_frame.h"
 #include "scene/gui/graph_node.h"
+#endif // !defined(ADVANCED_GUI_DISABLED) && !defined(_2D_NODES_DISABLED)
 #include "scene/gui/grid_container.h"
 #include "scene/gui/item_list.h"
 #include "scene/gui/label.h"
@@ -552,10 +554,12 @@ void register_scene_types() {
 	GDREGISTER_CLASS(HSplitContainer);
 	GDREGISTER_CLASS(VSplitContainer);
 
+#ifndef _2D_NODES_DISABLED
 	GDREGISTER_CLASS(GraphElement);
 	GDREGISTER_CLASS(GraphNode);
 	GDREGISTER_CLASS(GraphFrame);
 	GDREGISTER_CLASS(GraphEdit);
+#endif // _2D_NODES_DISABLED
 
 	GDREGISTER_CLASS(FoldableGroup);
 	GDREGISTER_CLASS(FoldableContainer);
@@ -1435,7 +1439,9 @@ void register_scene_types() {
 	if (RenderingServer::get_singleton()) {
 		// RenderingServer needs to exist for this to succeed.
 		ColorPicker::init_shaders();
+#if !defined(ADVANCED_GUI_DISABLED) && !defined(_2D_NODES_DISABLED)
 		GraphEdit::init_shaders();
+#endif // !defined(ADVANCED_GUI_DISABLED) && !defined(_2D_NODES_DISABLED)
 	}
 
 #ifndef SCENE_DEBUGGER_DISABLED
@@ -1501,7 +1507,9 @@ void unregister_scene_types() {
 	ParticleProcessMaterial::finish_shaders();
 	CanvasItemMaterial::finish_shaders();
 	ColorPicker::finish_shaders();
+#if !defined(ADVANCED_GUI_DISABLED) && !defined(_2D_NODES_DISABLED)
 	GraphEdit::finish_shaders();
+#endif // !defined(ADVANCED_GUI_DISABLED) && !defined(_2D_NODES_DISABLED)
 	SceneStringNames::free();
 
 	OS::get_singleton()->benchmark_end_measure("Scene", "Unregister Types");

@@ -3,7 +3,12 @@
 
 production = "yes"
 optimize = "size"
-lto = "thin"  # Link-time optimization for smaller binary
+lto = "thin"  # Debug 构建时禁用 LTO，便于调试
+
+# production = "no"
+# optimize = 'none'
+# debug_symbols = "yes"
+
 swappy = "no"  # Disables Swappy Frame Pacing
 disable_exceptions = "yes"
 

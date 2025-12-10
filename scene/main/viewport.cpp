@@ -35,7 +35,9 @@
 #include "core/templates/pair.h"
 #include "core/templates/sort_array.h"
 #include "scene/2d/audio_listener_2d.h"
+#ifndef _2D_NODES_DISABLED
 #include "scene/2d/camera_2d.h"
+#endif // _2D_NODES_DISABLED
 #include "scene/gui/control.h"
 #include "scene/gui/label.h"
 #include "scene/gui/popup.h"
@@ -4230,9 +4232,11 @@ void Viewport::_audio_listener_2d_remove(AudioListener2D *p_audio_listener) {
 	}
 }
 
+#ifndef _2D_NODES_DISABLED
 void Viewport::_camera_2d_set(Camera2D *p_camera_2d) {
 	camera_2d = p_camera_2d;
 }
+#endif // _2D_NODES_DISABLED
 
 #ifndef PHYSICS_2D_DISABLED
 void Viewport::_cleanup_mouseover_colliders(bool p_clean_all_frames, bool p_paused_only, uint64_t p_frame_reference) {
@@ -4326,6 +4330,7 @@ bool Viewport::is_audio_listener_2d() const {
 	return is_audio_listener_2d_enabled;
 }
 
+#ifndef _2D_NODES_DISABLED
 Camera2D *Viewport::get_camera_2d() const {
 	ERR_READ_THREAD_GUARD_V(nullptr);
 	return camera_2d;
@@ -4354,6 +4359,7 @@ void Viewport::assign_next_enabled_camera_2d(const StringName &p_camera_group) {
 		set_canvas_transform(Transform2D());
 	}
 }
+#endif // _2D_NODES_DISABLED
 
 #ifndef _3D_DISABLED
 #ifndef AUDIO_3D_DISABLED
@@ -5113,7 +5119,9 @@ void Viewport::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_as_audio_listener_2d", "enable"), &Viewport::set_as_audio_listener_2d);
 	ClassDB::bind_method(D_METHOD("is_audio_listener_2d"), &Viewport::is_audio_listener_2d);
 	ClassDB::bind_method(D_METHOD("get_audio_listener_2d"), &Viewport::get_audio_listener_2d);
+#ifndef _2D_NODES_DISABLED
 	ClassDB::bind_method(D_METHOD("get_camera_2d"), &Viewport::get_camera_2d);
+#endif // _2D_NODES_DISABLED
 
 #ifndef _3D_DISABLED
 	ClassDB::bind_method(D_METHOD("set_world_3d", "world_3d"), &Viewport::set_world_3d);

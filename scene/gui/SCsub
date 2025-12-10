@@ -3,12 +3,25 @@ from misc.utility.scons_hints import *
 
 Import("env")
 
+# Collect exclude patterns based on disabled features
+exclude_patterns = []
+
 if env["disable_video_stream_player"]:
-    # Exclude video_stream_player.cpp when disabled
+    exclude_patterns.append("video_stream_player")
+
+if env["disable_2d_nodes"] or env["disable_advanced_gui"]:
+    # graph_edit.cpp depends on Line2D which is disabled when disable_2d_nodes=yes
+    # GraphEdit is also part of advanced GUI, so exclude when disable_advanced_gui=yes
+    exclude_patterns.append("graph_edit")
+    exclude_patterns.append("graph_node")
+    exclude_patterns.append("graph_frame")
+    exclude_patterns.append("graph_element")
+
+if exclude_patterns:
     import glob
     import os
     cpp_files = glob.glob(os.path.join(str(Dir(".").srcnode()), "*.cpp"))
-    cpp_files = [os.path.basename(f) for f in cpp_files if "video_stream_player" not in f]
+    cpp_files = [os.path.basename(f) for f in cpp_files if not any(pattern in f for pattern in exclude_patterns)]
     for f in cpp_files:
         env.add_source_files(env.scene_sources, f)
 else:

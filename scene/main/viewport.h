@@ -43,7 +43,9 @@ class World3D;
 #endif // _3D_DISABLED
 
 class AudioListener2D;
+#ifndef _2D_NODES_DISABLED
 class Camera2D;
+#endif // _2D_NODES_DISABLED
 class CanvasItem;
 class CanvasLayer;
 class Control;
@@ -747,9 +749,11 @@ private:
 	bool is_audio_listener_2d_enabled = false;
 	RID internal_audio_listener_2d;
 
+#ifndef _2D_NODES_DISABLED
 	friend class Camera2D; // Needs _camera_2d_set
 	Camera2D *camera_2d = nullptr;
 	void _camera_2d_set(Camera2D *p_camera_2d);
+#endif // _2D_NODES_DISABLED
 
 #ifndef PHYSICS_2D_DISABLED
 	// Collider to frame
@@ -765,8 +769,10 @@ public:
 	void set_as_audio_listener_2d(bool p_enable);
 	bool is_audio_listener_2d() const;
 
+#ifndef _2D_NODES_DISABLED
 	Camera2D *get_camera_2d() const;
 	void assign_next_enabled_camera_2d(const StringName &p_camera_group);
+#endif // _2D_NODES_DISABLED
 
 #ifndef _3D_DISABLED
 private:
