@@ -293,6 +293,7 @@ public:
 			return !uses_particle_trails && !writes_modelview_or_projection && !uses_vertex && !uses_discard && !uses_depth_prepass_alpha && !uses_alpha_clip && !uses_alpha_antialiasing && !uses_world_coordinates && !wireframe && !stencil_enabled;
 		}
 
+		virtual Type get_type() const override { return TYPE_SCENE_FORWARD_MOBILE; }
 		virtual void set_code(const String &p_Code);
 		virtual bool is_animated() const;
 		virtual bool casts_shadows() const;
@@ -303,6 +304,11 @@ public:
 		RID get_shader_variant(ShaderVersion p_shader_version, bool p_ubershader) const;
 		uint64_t get_vertex_input_mask(ShaderVersion p_shader_version, bool p_ubershader);
 		bool is_valid() const;
+
+		// Type identification without RTTI
+		static ShaderData *cast(RendererRD::MaterialStorage::ShaderData *p_data) {
+			return (p_data && p_data->get_type() == TYPE_SCENE_FORWARD_MOBILE) ? static_cast<ShaderData *>(p_data) : nullptr;
+		}
 
 		SelfList<ShaderData> shader_list_element;
 

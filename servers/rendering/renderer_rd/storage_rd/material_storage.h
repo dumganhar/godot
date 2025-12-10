@@ -55,6 +55,17 @@ public:
 	};
 
 	struct ShaderData {
+		// Type identification without RTTI
+		enum Type {
+			TYPE_UNKNOWN,
+			TYPE_SCENE_FORWARD_CLUSTERED,
+			TYPE_SCENE_FORWARD_MOBILE,
+			TYPE_CANVAS,
+			TYPE_PARTICLES,
+			TYPE_SKY,
+			TYPE_FOG
+		};
+
 		enum BlendMode {
 			BLEND_MODE_MIX,
 			BLEND_MODE_ADD,
@@ -69,6 +80,7 @@ public:
 		HashMap<StringName, ShaderLanguage::ShaderNode::Uniform> uniforms;
 		HashMap<StringName, HashMap<int, RID>> default_texture_params;
 
+		virtual Type get_type() const { return TYPE_UNKNOWN; }
 		virtual void set_path_hint(const String &p_hint);
 		virtual void set_default_texture_parameter(const StringName &p_name, RID p_texture, int p_index);
 		virtual Variant get_default_parameter(const StringName &p_parameter) const;

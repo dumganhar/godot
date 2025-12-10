@@ -296,6 +296,7 @@ public:
 			return !uses_particle_trails && !writes_modelview_or_projection && !uses_vertex && !uses_position && !uses_discard && !uses_depth_prepass_alpha && !uses_alpha_clip && !uses_alpha_antialiasing && backface_culling && !uses_point_size && !uses_world_coordinates && !wireframe && !uses_z_clip_scale && !stencil_enabled;
 		}
 
+		virtual Type get_type() const override { return TYPE_SCENE_FORWARD_CLUSTERED; }
 		virtual void set_code(const String &p_Code);
 
 		virtual bool is_animated() const;
@@ -309,6 +310,11 @@ public:
 		uint64_t get_vertex_input_mask(PipelineVersion p_pipeline_version, uint32_t p_color_pass_flags, bool p_ubershader);
 		RD::PolygonCullMode get_cull_mode_from_cull_variant(CullVariant p_cull_variant);
 		bool is_valid() const;
+
+		// Type identification without RTTI
+		static ShaderData *cast(RendererRD::MaterialStorage::ShaderData *p_data) {
+			return (p_data && p_data->get_type() == TYPE_SCENE_FORWARD_CLUSTERED) ? static_cast<ShaderData *>(p_data) : nullptr;
+		}
 
 		SelfList<ShaderData> shader_list_element;
 		ShaderData();

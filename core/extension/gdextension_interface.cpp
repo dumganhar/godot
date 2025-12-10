@@ -103,6 +103,18 @@ class CallableCustomExtension : public CallableCustom {
 	}
 
 public:
+	// Type identification without RTTI
+	static bool is_instance(const CallableCustom *p_custom) {
+		if (!p_custom) {
+			return false;
+		}
+		auto cmp_func = p_custom->get_compare_equal_func();
+		return cmp_func == default_compare_equal || cmp_func == custom_compare_equal;
+	}
+	static const CallableCustomExtension *cast(const CallableCustom *p_custom) {
+		return is_instance(p_custom) ? static_cast<const CallableCustomExtension *>(p_custom) : nullptr;
+	}
+
 	uint32_t hash() const override {
 		return _hash;
 	}
@@ -1540,8 +1552,9 @@ static GDExtensionScriptInstancePtr gdextension_placeholder_script_instance_crea
 }
 
 static void gdextension_placeholder_script_instance_update(GDExtensionScriptInstancePtr p_placeholder, GDExtensionConstTypePtr p_properties, GDExtensionConstTypePtr p_values) {
-	PlaceHolderScriptInstance *placeholder = dynamic_cast<PlaceHolderScriptInstance *>(reinterpret_cast<ScriptInstance *>(p_placeholder));
-	ERR_FAIL_NULL_MSG(placeholder, "Unable to update placeholder, expected a PlaceHolderScriptInstance but received an invalid type.");
+	ScriptInstance *script_instance = reinterpret_cast<ScriptInstance *>(p_placeholder);
+	ERR_FAIL_COND_MSG(!script_instance || !script_instance->is_placeholder(), "Unable to update placeholder, expected a PlaceHolderScriptInstance but received an invalid type.");
+	PlaceHolderScriptInstance *placeholder = static_cast<PlaceHolderScriptInstance *>(script_instance);
 
 	const Array &properties = *reinterpret_cast<const Array *>(p_properties);
 	const Dictionary &values = *reinterpret_cast<const Dictionary *>(p_values);
@@ -1604,7 +1617,7 @@ static void *gdextension_callable_custom_get_userdata(GDExtensionTypePtr p_calla
 	if (!callable.is_custom()) {
 		return nullptr;
 	}
-	const CallableCustomExtension *custom_callable = dynamic_cast<const CallableCustomExtension *>(callable.get_custom());
+	const CallableCustomExtension *custom_callable = CallableCustomExtension::cast(callable.get_custom());
 	if (!custom_callable) {
 		return nullptr;
 	}

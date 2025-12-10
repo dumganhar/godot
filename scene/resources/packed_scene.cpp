@@ -1097,7 +1097,7 @@ Error SceneState::_parse_connections(Node *p_owner, Node *p_node, HashMap<String
 			Callable base_callable;
 
 			if (c.callable.is_custom()) {
-				CallableCustomBind *ccb = dynamic_cast<CallableCustomBind *>(c.callable.get_custom());
+				CallableCustomBind *ccb = CallableCustomBind::cast(c.callable.get_custom());
 				if (ccb) {
 					binds = ccb->get_binds();
 
@@ -1109,7 +1109,7 @@ Error SceneState::_parse_connections(Node *p_owner, Node *p_node, HashMap<String
 					base_callable = ccb->get_callable();
 				}
 
-				CallableCustomUnbind *ccu = dynamic_cast<CallableCustomUnbind *>(c.callable.get_custom());
+				CallableCustomUnbind *ccu = CallableCustomUnbind::cast(c.callable.get_custom());
 				if (ccu) {
 					unbinds = ccu->get_unbinds();
 					base_callable = ccu->get_callable();

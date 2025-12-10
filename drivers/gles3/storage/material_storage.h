@@ -49,10 +49,20 @@ namespace GLES3 {
 /* Shader Structs */
 
 struct ShaderData {
+	// Type identification without RTTI
+	enum Type {
+		TYPE_UNKNOWN,
+		TYPE_SCENE,
+		TYPE_CANVAS,
+		TYPE_PARTICLES,
+		TYPE_SKY
+	};
+
 	String path;
 	HashMap<StringName, ShaderLanguage::ShaderNode::Uniform> uniforms;
 	HashMap<StringName, HashMap<int, RID>> default_texture_params;
 
+	virtual Type get_type() const { return TYPE_UNKNOWN; }
 	virtual void set_path_hint(const String &p_hint);
 	virtual void set_default_texture_parameter(const StringName &p_name, RID p_texture, int p_index);
 	virtual Variant get_default_parameter(const StringName &p_parameter) const;
@@ -347,10 +357,16 @@ struct SceneShaderData : public ShaderData {
 
 	uint64_t vertex_input_mask;
 
+	virtual Type get_type() const override { return TYPE_SCENE; }
 	virtual void set_code(const String &p_Code);
 	virtual bool is_animated() const;
 	virtual bool casts_shadows() const;
 	virtual RS::ShaderNativeSourceCode get_native_source_code() const;
+
+	// Type identification without RTTI
+	static SceneShaderData *cast(ShaderData *p_data) {
+		return (p_data && p_data->get_type() == TYPE_SCENE) ? static_cast<SceneShaderData *>(p_data) : nullptr;
+	}
 
 	SceneShaderData();
 	virtual ~SceneShaderData();

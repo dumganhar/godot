@@ -2542,7 +2542,7 @@ RS::CullMode MaterialStorage::material_get_cull_mode(RID p_material) const {
 	ERR_FAIL_NULL_V(material, RS::CULL_MODE_DISABLED);
 	ERR_FAIL_NULL_V(material->shader, RS::CULL_MODE_DISABLED);
 	if (material->shader->data) {
-		SceneShaderData *data = dynamic_cast<SceneShaderData *>(material->shader->data);
+		SceneShaderData *data = SceneShaderData::cast(material->shader->data);
 		if (data) {
 			return (RS::CullMode)data->cull_mode;
 		}

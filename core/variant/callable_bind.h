@@ -41,6 +41,13 @@ class CallableCustomBind : public CallableCustom {
 	static bool _less_func(const CallableCustom *p_a, const CallableCustom *p_b);
 
 public:
+	// Type identification without RTTI
+	static bool is_instance(const CallableCustom *p_custom) {
+		return p_custom && p_custom->get_compare_equal_func() == _equal_func;
+	}
+	static CallableCustomBind *cast(CallableCustom *p_custom) {
+		return is_instance(p_custom) ? static_cast<CallableCustomBind *>(p_custom) : nullptr;
+	}
 	//for every type that inherits, these must always be the same for this type
 	virtual uint32_t hash() const override;
 	virtual String get_as_text() const override;
@@ -71,6 +78,13 @@ class CallableCustomUnbind : public CallableCustom {
 	static bool _less_func(const CallableCustom *p_a, const CallableCustom *p_b);
 
 public:
+	// Type identification without RTTI
+	static bool is_instance(const CallableCustom *p_custom) {
+		return p_custom && p_custom->get_compare_equal_func() == _equal_func;
+	}
+	static CallableCustomUnbind *cast(CallableCustom *p_custom) {
+		return is_instance(p_custom) ? static_cast<CallableCustomUnbind *>(p_custom) : nullptr;
+	}
 	//for every type that inherits, these must always be the same for this type
 	virtual uint32_t hash() const override;
 	virtual String get_as_text() const override;

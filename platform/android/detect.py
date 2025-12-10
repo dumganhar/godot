@@ -188,9 +188,13 @@ def configure(env: "SConsEnvironment"):
     env["RANLIB"] = os.path.join(compiler_path, "llvm-ranlib")
     env["AS"] = os.path.join(compiler_path, "clang")
 
+    # Use default visibility in debug builds for easier symbol inspection
+    visibility = "-fvisibility=default" if env.get("debug_symbols", False) else "-fvisibility=hidden"
     env.Append(
-        CCFLAGS=(["-fpic", "-ffunction-sections", "-fdata-sections", "-funwind-tables", "-fstack-protector-strong", "-fvisibility=hidden"])
+        CCFLAGS=(["-fpic", "-ffunction-sections", "-fdata-sections", "-funwind-tables", "-fstack-protector-strong", visibility])
     )
+    # Disable RTTI (Run-Time Type Information) to reduce binary size
+    env.Append(CXXFLAGS=["-fno-rtti"])
 
     has_swappy = detect_swappy()
     if not has_swappy:
@@ -231,7 +235,10 @@ def configure(env: "SConsEnvironment"):
 
     # Link flags
 
-    env.Append(LINKFLAGS=["-Wl,--gc-sections", "-Wl,--no-undefined", "-Wl,-z,now"])
+    # Security hardening flags:
+    # -Wl,-z,relro: Make GOT (Global Offset Table) read-only after relocation
+    # -Wl,-z,now: Resolve all symbols at load time (Full RELRO)
+    env.Append(LINKFLAGS=["-Wl,--gc-sections", "-Wl,--no-undefined", "-Wl,-z,relro", "-Wl,-z,now"])
     env.Append(LINKFLAGS=["-Wl,--build-id"])
     env.Append(LINKFLAGS=["-Wl,-soname,libgodot_android.so"])
 
