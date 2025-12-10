@@ -482,6 +482,7 @@ void RendererSceneRenderRD::_render_buffers_post_process_and_tonemap(const Rende
 
 	bool dest_is_msaa_2d = rb->get_view_count() == 1 && texture_storage->render_target_get_msaa(render_target) != RS::VIEWPORT_MSAA_DISABLED;
 
+#ifndef DOF_DISABLED
 	bool using_dof = RSG::camera_attributes->camera_attributes_uses_dof(p_render_data->camera_attributes);
 
 	if (using_dof && p_render_data->transparent_bg) {
@@ -539,6 +540,7 @@ void RendererSceneRenderRD::_render_buffers_post_process_and_tonemap(const Rende
 		}
 		RD::get_singleton()->draw_command_end_label();
 	}
+#endif // !DOF_DISABLED
 
 	float auto_exposure_scale = 1.0;
 
@@ -566,6 +568,7 @@ void RendererSceneRenderRD::_render_buffers_post_process_and_tonemap(const Rende
 		RD::get_singleton()->draw_command_end_label();
 	}
 
+#ifndef GLOW_DISABLED
 	int max_glow_level = -1;
 
 	if (can_use_effects && p_render_data->environment.is_valid() && environment_get_glow_enabled(p_render_data->environment)) {
@@ -619,6 +622,7 @@ void RendererSceneRenderRD::_render_buffers_post_process_and_tonemap(const Rende
 
 		RD::get_singleton()->draw_command_end_label();
 	}
+#endif // !GLOW_DISABLED
 
 	{
 		RENDER_TIMESTAMP("Tonemap");
@@ -636,6 +640,7 @@ void RendererSceneRenderRD::_render_buffers_post_process_and_tonemap(const Rende
 			tonemap.exposure_texture = texture_storage->texture_rd_get_default(RendererRD::TextureStorage::DEFAULT_RD_TEXTURE_WHITE);
 		}
 
+#ifndef GLOW_DISABLED
 		if (can_use_effects && p_render_data->environment.is_valid() && environment_get_glow_enabled(p_render_data->environment)) {
 			tonemap.use_glow = true;
 			tonemap.glow_mode = RendererRD::ToneMapper::TonemapSettings::GlowMode(environment_get_glow_blend_mode(p_render_data->environment));
@@ -657,7 +662,9 @@ void RendererSceneRenderRD::_render_buffers_post_process_and_tonemap(const Rende
 				tonemap.glow_map = texture_storage->texture_rd_get_default(RendererRD::TextureStorage::DEFAULT_RD_TEXTURE_WHITE);
 			}
 
-		} else {
+		} else
+#endif // !GLOW_DISABLED
+		{
 			tonemap.glow_texture = texture_storage->texture_rd_get_default(RendererRD::TextureStorage::DEFAULT_RD_TEXTURE_BLACK);
 			tonemap.glow_map = texture_storage->texture_rd_get_default(RendererRD::TextureStorage::DEFAULT_RD_TEXTURE_WHITE);
 		}
@@ -898,9 +905,11 @@ void RendererSceneRenderRD::_post_process_subpass(RID p_source_texture, RID p_fr
 	// We don't support glow or auto exposure here, if they are needed, don't use subpasses!
 	// The problem is that we need to use the result so far and process them before we can
 	// apply this to our results.
+#ifndef GLOW_DISABLED
 	if (can_use_effects && p_render_data->environment.is_valid() && environment_get_glow_enabled(p_render_data->environment)) {
 		ERR_FAIL_MSG("Glow is not supported when using subpasses.");
 	}
+#endif // !GLOW_DISABLED
 
 	if (can_use_effects && RSG::camera_attributes->camera_attributes_uses_auto_exposure(p_render_data->camera_attributes)) {
 		ERR_FAIL_MSG("Auto Exposure is not supported when using subpasses.");
@@ -1705,7 +1714,9 @@ void RendererSceneRenderRD::init() {
 
 	bool can_use_storage = _render_buffers_can_be_storage();
 	bool can_use_vrs = is_vrs_supported();
+#ifndef DOF_DISABLED
 	bokeh_dof = memnew(RendererRD::BokehDOF(!can_use_storage));
+#endif
 	copy_effects = memnew(RendererRD::CopyEffects(!can_use_storage));
 	debug_effects = memnew(RendererRD::DebugEffects);
 	luminance = memnew(RendererRD::Luminance(!can_use_storage));
@@ -1727,9 +1738,11 @@ RendererSceneRenderRD::~RendererSceneRenderRD() {
 		memdelete(forward_id_storage);
 	}
 
+#ifndef DOF_DISABLED
 	if (bokeh_dof) {
 		memdelete(bokeh_dof);
 	}
+#endif
 	if (copy_effects) {
 		memdelete(copy_effects);
 	}

@@ -30,6 +30,8 @@
 
 #pragma once
 
+#ifndef SS_EFFECTS_DISABLED
+
 #include "servers/rendering/renderer_rd/shaders/effects/screen_space_reflection.glsl.gen.h"
 #include "servers/rendering/renderer_rd/shaders/effects/screen_space_reflection_filter.glsl.gen.h"
 #include "servers/rendering/renderer_rd/shaders/effects/screen_space_reflection_scale.glsl.gen.h"
@@ -526,3 +528,5 @@ private:
 };
 
 } // namespace RendererRD
+
+#endif // !SS_EFFECTS_DISABLED

@@ -40,7 +40,9 @@
 #endif
 #include "servers/rendering/renderer_rd/effects/motion_vectors_store.h"
 #include "servers/rendering/renderer_rd/effects/resolve.h"
+#ifndef SS_EFFECTS_DISABLED
 #include "servers/rendering/renderer_rd/effects/ss_effects.h"
+#endif
 #include "servers/rendering/renderer_rd/effects/taa.h"
 #include "servers/rendering/renderer_rd/forward_clustered/scene_shader_forward_clustered.h"
 #include "servers/rendering/renderer_rd/renderer_scene_render_rd.h"
@@ -106,6 +108,7 @@ public:
 	public:
 		ClusterBuilderRD *cluster_builder = nullptr;
 
+#ifndef SS_EFFECTS_DISABLED
 		struct SSEffectsData {
 			Projection last_frame_projections[RendererSceneRender::MAX_RENDER_VIEWS];
 			Transform3D last_frame_transform;
@@ -114,6 +117,7 @@ public:
 			RendererRD::SSEffects::SSAORenderBuffers ssao;
 			RendererRD::SSEffects::SSRRenderBuffers ssr;
 		} ss_effects_data;
+#endif
 
 		enum DepthFrameBufferType {
 			DEPTH_FB,
@@ -727,7 +731,9 @@ private:
 #ifndef FSR2_DISABLED
 	RendererRD::FSR2Effect *fsr2_effect = nullptr;
 #endif
+#ifndef SS_EFFECTS_DISABLED
 	RendererRD::SSEffects *ss_effects = nullptr;
+#endif
 
 #ifdef METAL_MFXTEMPORAL_ENABLED
 	RendererRD::MFXTemporalEffect *mfx_temporal_effect = nullptr;
@@ -793,7 +799,9 @@ public:
 	static RenderForwardClustered *get_singleton() { return singleton; }
 
 	ClusterBuilderSharedDataRD *get_cluster_builder_shared() { return &cluster_builder_shared; }
+#ifndef SS_EFFECTS_DISABLED
 	RendererRD::SSEffects *get_ss_effects() { return ss_effects; }
+#endif
 
 	/* callback from updating our lighting UBOs, used to populate cluster builder */
 	virtual void setup_added_reflection_probe(const Transform3D &p_transform, const Vector3 &p_half_size) override;

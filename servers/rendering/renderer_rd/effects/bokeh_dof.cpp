@@ -29,6 +29,9 @@
 /**************************************************************************/
 
 #include "bokeh_dof.h"
+
+#ifndef DOF_DISABLED
+
 #include "copy_effects.h"
 #include "servers/rendering/renderer_rd/storage_rd/material_storage.h"
 #include "servers/rendering/renderer_rd/uniform_set_cache_rd.h"
@@ -495,3 +498,5 @@ void BokehDOF::bokeh_dof_raster(const BokehBuffers &p_buffers, RID p_camera_attr
 		}
 	}
 }
+
+#endif // !DOF_DISABLED

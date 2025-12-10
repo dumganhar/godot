@@ -739,6 +739,7 @@ void RenderForwardClustered::_setup_environment(const RenderDataRD *p_render_dat
 		}
 	}
 
+#ifndef SS_EFFECTS_DISABLED
 	if (get_debug_draw_mode() == RS::VIEWPORT_DEBUG_DRAW_UNSHADED) {
 		scene_state.ubo.ss_effects_flags = 0;
 	} else if (p_render_data->reflection_probe.is_null() && is_environment(p_render_data->environment)) {
@@ -753,6 +754,9 @@ void RenderForwardClustered::_setup_environment(const RenderDataRD *p_render_dat
 	} else {
 		scene_state.ubo.ss_effects_flags = 0;
 	}
+#else
+	scene_state.ubo.ss_effects_flags = 0;
+#endif // !SS_EFFECTS_DISABLED
 
 	if (p_index >= (int)scene_state.implementation_uniform_buffers.size()) {
 		uint32_t from = scene_state.implementation_uniform_buffers.size();
@@ -1361,6 +1365,7 @@ void RenderForwardClustered::setup_added_decal(const Transform3D &p_transform, c
 
 /* Render scene */
 
+#ifndef SS_EFFECTS_DISABLED
 void RenderForwardClustered::_process_ssao(Ref<RenderSceneBuffersRD> p_render_buffers, RID p_environment, const RID *p_normal_buffers, const Projection *p_projections) {
 	ERR_FAIL_NULL(ss_effects);
 	ERR_FAIL_COND(p_render_buffers.is_null());
@@ -1447,6 +1452,7 @@ void RenderForwardClustered::_copy_framebuffer_to_ssil(Ref<RenderSceneBuffersRD>
 		}
 	}
 }
+#endif // !SS_EFFECTS_DISABLED
 
 void RenderForwardClustered::_pre_opaque_render(RenderDataRD *p_render_data, bool p_use_ssao, bool p_use_ssil, bool p_use_gi, const RID *p_normal_roughness_slices, RID p_voxel_gi_buffer) {
 	// Render shadows while GI is rendering, due to how barriers are handled, this should happen at the same time

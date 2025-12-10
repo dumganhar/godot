@@ -251,6 +251,11 @@ opts.Add(BoolVariable("disable_video_stream_player", "Disable VideoStreamPlayer"
 opts.Add(BoolVariable("disable_camera_server", "Disable CameraServer", False))
 opts.Add(BoolVariable("disable_multiplayer", "Disable multiplayer (MultiplayerAPI, MultiplayerPeer)", False))
 opts.Add(BoolVariable("disable_fsr2", "Disable AMD FSR2 upscaling", False))
+opts.Add(BoolVariable("disable_gi", "Disable GI (SDFGI/VoxelGI)", False))
+opts.Add(BoolVariable("disable_ss_effects", "Disable screen-space effects (SSAO/SSIL/SSR)", False))
+opts.Add(BoolVariable("disable_volumetric_fog", "Disable volumetric fog", False))
+opts.Add(BoolVariable("disable_dof", "Disable depth of field", False))
+opts.Add(BoolVariable("disable_glow", "Disable glow/bloom effects", False))
 opts.Add(BoolVariable("disable_http_request", "Disable HTTPRequest", False))
 opts.Add(BoolVariable("disable_scene_debugger", "Disable SceneDebugger", False))
 opts.Add(BoolVariable("disable_steam", "Disable Steam integration", False))
@@ -1062,6 +1067,16 @@ if env["disable_multiplayer"]:
     env.Append(CPPDEFINES=["MULTIPLAYER_DISABLED"])
 if env["disable_fsr2"]:
     env.Append(CPPDEFINES=["FSR2_DISABLED"])
+if env["disable_gi"]:
+    env.Append(CPPDEFINES=["GI_DISABLED"])
+if env["disable_ss_effects"]:
+    env.Append(CPPDEFINES=["SS_EFFECTS_DISABLED"])
+if env["disable_volumetric_fog"]:
+    env.Append(CPPDEFINES=["VOLUMETRIC_FOG_DISABLED"])
+if env["disable_dof"]:
+    env.Append(CPPDEFINES=["DOF_DISABLED"])
+if env["disable_glow"]:
+    env.Append(CPPDEFINES=["GLOW_DISABLED"])
 if env["disable_http_request"]:
     env.Append(CPPDEFINES=["HTTP_REQUEST_DISABLED"])
 if env["disable_scene_debugger"]:

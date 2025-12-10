@@ -30,6 +30,8 @@
 
 #pragma once
 
+#ifndef DOF_DISABLED
+
 #include "servers/rendering/renderer_rd/pipeline_cache_rd.h"
 #include "servers/rendering/renderer_rd/shaders/effects/bokeh_dof.glsl.gen.h"
 #include "servers/rendering/renderer_rd/shaders/effects/bokeh_dof_raster.glsl.gen.h"
@@ -117,3 +119,5 @@ public:
 };
 
 } // namespace RendererRD
+
+#endif // !DOF_DISABLED

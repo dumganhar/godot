@@ -58,7 +58,9 @@ class RendererSceneRenderRD : public RendererSceneRender, public RenderingShader
 
 protected:
 	RendererRD::ForwardIDStorage *forward_id_storage = nullptr;
+#ifndef DOF_DISABLED
 	RendererRD::BokehDOF *bokeh_dof = nullptr;
+#endif
 	RendererRD::CopyEffects *copy_effects = nullptr;
 	RendererRD::DebugEffects *debug_effects = nullptr;
 	RendererRD::Luminance *luminance = nullptr;

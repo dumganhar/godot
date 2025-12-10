@@ -30,6 +30,8 @@
 
 #include "ss_effects.h"
 
+#ifndef SS_EFFECTS_DISABLED
+
 #include "core/config/project_settings.h"
 #include "servers/rendering/renderer_rd/storage_rd/material_storage.h"
 #include "servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.h"
@@ -1690,3 +1692,5 @@ void SSEffects::sub_surface_scattering(Ref<RenderSceneBuffersRD> p_render_buffer
 		RD::get_singleton()->compute_list_end();
 	}
 }
+
+#endif // !SS_EFFECTS_DISABLED
