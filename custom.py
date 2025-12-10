@@ -35,6 +35,7 @@ minizip = "no"
 brotli = "no"
 vulkan = "no"
 accesskit = "no"
+sdl = "no"
 
 # Builtin libraries
 builtin_zstd = "no"       # Disabled - compression.cpp uses ZSTD_ENABLED macro
