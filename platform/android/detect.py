@@ -189,7 +189,7 @@ def configure(env: "SConsEnvironment"):
     env["AS"] = os.path.join(compiler_path, "clang")
 
     env.Append(
-        CCFLAGS=(["-fpic", "-ffunction-sections", "-funwind-tables", "-fstack-protector-strong", "-fvisibility=hidden"])
+        CCFLAGS=(["-fpic", "-ffunction-sections", "-fdata-sections", "-funwind-tables", "-fstack-protector-strong", "-fvisibility=hidden"])
     )
 
     has_swappy = detect_swappy()
