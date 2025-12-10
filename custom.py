@@ -5,6 +5,7 @@ production = "yes"
 optimize = "size"
 lto = "thin"  # Link-time optimization for smaller binary
 swappy = "no"  # Disables Swappy Frame Pacing
+disable_exceptions = "yes"
 
 # Core feature disables
 disable_audio_3d = "yes"      # Disables only 3D audio (AudioStreamPlayer3D, AudioListener3D)
