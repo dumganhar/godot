@@ -3,7 +3,61 @@ from misc.utility.scons_hints import *
 
 Import("env")
 
-env.add_source_files(env.scene_sources, "*.cpp")
+# Core 2D files (always needed for GUI integration)
+env.add_source_files(env.scene_sources, "node_2d.cpp")
+env.add_source_files(env.scene_sources, "marker_2d.cpp")
+env.add_source_files(env.scene_sources, "canvas_group.cpp")
+env.add_source_files(env.scene_sources, "canvas_modulate.cpp")
+env.add_source_files(env.scene_sources, "back_buffer_copy.cpp")
+
+# 2D Audio (separate from 2D game nodes)
+env.add_source_files(env.scene_sources, "audio_stream_player_2d.cpp")
+env.add_source_files(env.scene_sources, "audio_listener_2d.cpp")
+
+# 2D game nodes (can be disabled for 3D-only games)
+if not env["disable_2d_nodes"]:
+    # Sprites
+    env.add_source_files(env.scene_sources, "sprite_2d.cpp")
+    env.add_source_files(env.scene_sources, "animated_sprite_2d.cpp")
+
+    # Camera
+    env.add_source_files(env.scene_sources, "camera_2d.cpp")
+
+    # Lights
+    env.add_source_files(env.scene_sources, "light_2d.cpp")
+    env.add_source_files(env.scene_sources, "light_occluder_2d.cpp")
+
+    # Particles
+    env.add_source_files(env.scene_sources, "gpu_particles_2d.cpp")
+    env.add_source_files(env.scene_sources, "cpu_particles_2d.cpp")
+
+    # Graphics
+    env.add_source_files(env.scene_sources, "line_2d.cpp")
+    env.add_source_files(env.scene_sources, "line_builder.cpp")
+    env.add_source_files(env.scene_sources, "polygon_2d.cpp")
+
+    # Mesh
+    env.add_source_files(env.scene_sources, "mesh_instance_2d.cpp")
+    env.add_source_files(env.scene_sources, "multimesh_instance_2d.cpp")
+
+    # TileMap
+    env.add_source_files(env.scene_sources, "tile_map.cpp")
+    env.add_source_files(env.scene_sources, "tile_map_layer.cpp")
+
+    # Skeleton
+    env.add_source_files(env.scene_sources, "skeleton_2d.cpp")
+
+    # Parallax
+    env.add_source_files(env.scene_sources, "parallax_2d.cpp")
+    env.add_source_files(env.scene_sources, "parallax_background.cpp")
+    env.add_source_files(env.scene_sources, "parallax_layer.cpp")
+
+    # Path
+    env.add_source_files(env.scene_sources, "path_2d.cpp")
+
+    # Other
+    env.add_source_files(env.scene_sources, "remote_transform_2d.cpp")
+    env.add_source_files(env.scene_sources, "visible_on_screen_notifier_2d.cpp")
 
 # Chain load SCsubs
 if not env["disable_physics_2d"]:

@@ -233,6 +233,7 @@ opts.Add("vsproj_name", "Name of the Visual Studio solution", "godot")
 opts.Add("import_env_vars", "A comma-separated list of environment variables to copy from the outer environment.", "")
 opts.Add(BoolVariable("disable_exceptions", "Force disabling exception handling code", True))
 opts.Add(BoolVariable("disable_3d", "Disable 3D nodes for a smaller executable", False))
+opts.Add(BoolVariable("disable_2d_nodes", "Disable 2D game nodes (keeps GUI, audio)", False))
 opts.Add(BoolVariable("disable_advanced_gui", "Disable advanced GUI nodes and behaviors", False))
 opts.Add(BoolVariable("disable_physics_2d", "Disable 2D physics nodes and server", False))
 opts.Add(BoolVariable("disable_physics_3d", "Disable 3D physics nodes and server", False))
@@ -1019,6 +1020,8 @@ if env["disable_3d"]:
     env["disable_navigation_3d"] = True
     env["disable_physics_3d"] = True
     env["disable_xr"] = True
+if env["disable_2d_nodes"]:
+    env.Append(CPPDEFINES=["_2D_NODES_DISABLED"])
 if env["disable_advanced_gui"]:
     env.Append(CPPDEFINES=["ADVANCED_GUI_DISABLED"])
 if env["disable_physics_2d"]:

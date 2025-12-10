@@ -22,6 +22,7 @@ disable_servers_debugger = "yes"  # Disables ServersDebugger
 disable_controller_mappings = "yes"  # Disables controller/gamepad mappings
 disable_movie_writer = "yes"
 disable_advanced_gui = "yes"
+disable_2d_nodes = "yes"          # Disables 2D game nodes (keeps GUI, 2D audio)
 disable_physics_2d = "yes"
 disable_physics_3d = "yes"
 disable_xr = "yes"

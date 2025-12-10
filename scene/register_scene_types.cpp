@@ -176,20 +176,26 @@
 #include "scene/resources/animated_texture.h"
 #endif
 
-// 2D
-#include "scene/2d/animated_sprite_2d.h"
+// 2D (core - always needed)
 #include "scene/2d/audio_listener_2d.h"
 #include "scene/2d/audio_stream_player_2d.h"
 #include "scene/2d/back_buffer_copy.h"
-#include "scene/2d/camera_2d.h"
 #include "scene/2d/canvas_group.h"
 #include "scene/2d/canvas_modulate.h"
+#include "scene/2d/marker_2d.h"
+#include "scene/2d/node_2d.h"
+#include "scene/resources/2d/polygon_path_finder.h"
+#include "scene/resources/world_2d.h"
+
+// 2D game nodes (can be disabled)
+#ifndef _2D_NODES_DISABLED
+#include "scene/2d/animated_sprite_2d.h"
+#include "scene/2d/camera_2d.h"
 #include "scene/2d/cpu_particles_2d.h"
 #include "scene/2d/gpu_particles_2d.h"
 #include "scene/2d/light_2d.h"
 #include "scene/2d/light_occluder_2d.h"
 #include "scene/2d/line_2d.h"
-#include "scene/2d/marker_2d.h"
 #include "scene/2d/mesh_instance_2d.h"
 #include "scene/2d/multimesh_instance_2d.h"
 #include "scene/2d/parallax_2d.h"
@@ -200,7 +206,6 @@
 #include "scene/2d/sprite_2d.h"
 #include "scene/2d/tile_map_layer.h"
 #include "scene/2d/visible_on_screen_notifier_2d.h"
-#include "scene/resources/2d/polygon_path_finder.h"
 #include "scene/resources/2d/skeleton/skeleton_modification_2d.h"
 #include "scene/resources/2d/skeleton/skeleton_modification_2d_ccdik.h"
 #include "scene/resources/2d/skeleton/skeleton_modification_2d_fabrik.h"
@@ -209,12 +214,12 @@
 #include "scene/resources/2d/skeleton/skeleton_modification_2d_twoboneik.h"
 #include "scene/resources/2d/skeleton/skeleton_modification_stack_2d.h"
 #include "scene/resources/2d/tile_set.h"
-#include "scene/resources/world_2d.h"
 #ifndef DISABLE_DEPRECATED
 #include "scene/2d/parallax_background.h"
 #include "scene/2d/parallax_layer.h"
 #include "scene/2d/tile_map.h"
 #endif
+#endif // _2D_NODES_DISABLED
 
 #ifndef NAVIGATION_2D_DISABLED
 #include "scene/2d/navigation/navigation_agent_2d.h"
@@ -881,15 +886,20 @@ void register_scene_types() {
 
 	GDREGISTER_CLASS(Node2D);
 	GDREGISTER_CLASS(CanvasGroup);
+	GDREGISTER_CLASS(Marker2D);
+	GDREGISTER_CLASS(BackBufferCopy);
+
+#ifndef _2D_NODES_DISABLED
 	GDREGISTER_CLASS(CPUParticles2D);
 	GDREGISTER_CLASS(GPUParticles2D);
 	GDREGISTER_CLASS(Sprite2D);
 	GDREGISTER_CLASS(SpriteFrames);
 	GDREGISTER_CLASS(AnimatedSprite2D);
-	GDREGISTER_CLASS(Marker2D);
 	GDREGISTER_CLASS(Line2D);
 	GDREGISTER_CLASS(MeshInstance2D);
 	GDREGISTER_CLASS(MultiMeshInstance2D);
+#endif // _2D_NODES_DISABLED
+
 #ifndef PHYSICS_2D_DISABLED
 	GDREGISTER_ABSTRACT_CLASS(CollisionObject2D);
 	GDREGISTER_ABSTRACT_CLASS(PhysicsBody2D);
@@ -904,6 +914,8 @@ void register_scene_types() {
 	GDREGISTER_CLASS(RayCast2D);
 	GDREGISTER_CLASS(ShapeCast2D);
 #endif // PHYSICS_2D_DISABLED
+
+#ifndef _2D_NODES_DISABLED
 	GDREGISTER_CLASS(VisibleOnScreenNotifier2D);
 	GDREGISTER_CLASS(VisibleOnScreenEnabler2D);
 	GDREGISTER_CLASS(Polygon2D);
@@ -914,12 +926,15 @@ void register_scene_types() {
 	GDREGISTER_CLASS(DirectionalLight2D);
 	GDREGISTER_CLASS(LightOccluder2D);
 	GDREGISTER_CLASS(OccluderPolygon2D);
-	GDREGISTER_CLASS(BackBufferCopy);
+#endif // _2D_NODES_DISABLED
 
 	OS::get_singleton()->yield(); // may take time to init
 
+#ifndef _2D_NODES_DISABLED
 	GDREGISTER_CLASS(Camera2D);
+#endif // _2D_NODES_DISABLED
 	GDREGISTER_CLASS(AudioListener2D);
+
 #ifndef PHYSICS_2D_DISABLED
 	GDREGISTER_ABSTRACT_CLASS(Joint2D);
 	GDREGISTER_CLASS(PinJoint2D);
@@ -927,6 +942,8 @@ void register_scene_types() {
 	GDREGISTER_CLASS(DampedSpringJoint2D);
 	GDREGISTER_CLASS(TouchScreenButton);
 #endif // PHYSICS_2D_DISABLED
+
+#ifndef _2D_NODES_DISABLED
 	GDREGISTER_CLASS(TileSet);
 	GDREGISTER_ABSTRACT_CLASS(TileSetSource);
 	GDREGISTER_CLASS(TileSetAtlasSource);
@@ -956,6 +973,7 @@ void register_scene_types() {
 	GDREGISTER_CLASS(SkeletonModification2DJiggle);
 	GDREGISTER_CLASS(SkeletonModification2DPhysicalBones);
 #endif // PHYSICS_2D_DISABLED
+#endif // _2D_NODES_DISABLED
 
 	OS::get_singleton()->yield(); // may take time to init
 
@@ -1120,9 +1138,11 @@ void register_scene_types() {
 	OS::get_singleton()->yield(); // may take time to init
 
 	GDREGISTER_CLASS(AudioStreamPlayer2D);
+#ifndef _2D_NODES_DISABLED
 	GDREGISTER_CLASS(Curve2D);
 	GDREGISTER_CLASS(Path2D);
 	GDREGISTER_CLASS(PathFollow2D);
+#endif // _2D_NODES_DISABLED
 
 #ifndef PHYSICS_2D_DISABLED
 	GDREGISTER_ABSTRACT_CLASS(Shape2D);
@@ -1152,14 +1172,18 @@ void register_scene_types() {
 	OS::get_singleton()->yield(); // may take time to init
 
 	// 2D nodes that support navmesh baking need to server register their source geometry parsers.
+#ifndef _2D_NODES_DISABLED
 	MeshInstance2D::navmesh_parse_init();
 	MultiMeshInstance2D::navmesh_parse_init();
+#endif // _2D_NODES_DISABLED
 	NavigationObstacle2D::navmesh_parse_init();
+#ifndef _2D_NODES_DISABLED
 	Polygon2D::navmesh_parse_init();
 #ifndef DISABLE_DEPRECATED
 	TileMap::navmesh_parse_init();
 #endif
 	TileMapLayer::navmesh_parse_init();
+#endif // _2D_NODES_DISABLED
 #ifndef PHYSICS_2D_DISABLED
 	StaticBody2D::navmesh_parse_init();
 #endif // PHYSICS_2D_DISABLED
