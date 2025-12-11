@@ -11,6 +11,7 @@ lto = "thin"  # Debug 构建时禁用 LTO，便于调试
 
 swappy = "no"  # Disables Swappy Frame Pacing
 disable_exceptions = "yes"
+disable_rtti = "yes"  # Disables C++ RTTI to reduce binary size
 
 # Core feature disables
 disable_audio_3d = "yes"      # Disables only 3D audio (AudioStreamPlayer3D, AudioListener3D)

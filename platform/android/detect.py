@@ -194,7 +194,8 @@ def configure(env: "SConsEnvironment"):
         CCFLAGS=(["-fpic", "-ffunction-sections", "-fdata-sections", "-funwind-tables", "-fstack-protector-strong", visibility])
     )
     # Disable RTTI (Run-Time Type Information) to reduce binary size
-    env.Append(CXXFLAGS=["-fno-rtti"])
+    if env.get("disable_rtti", False):
+        env.Append(CXXFLAGS=["-fno-rtti"])
 
     has_swappy = detect_swappy()
     if not has_swappy:
